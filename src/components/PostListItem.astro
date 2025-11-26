@@ -10,12 +10,12 @@ interface Props {
 const { title, description, date, image, href } = Astro.props;
 ---
 
-<a
-  href={href}
-  class="group flex flex-col gap-8 border-b-[0.5px] border-gray-200/50 py-12 transition-all duration-200 hover:bg-gray-50/80 hover:border-gray-300/50 sm:flex-row sm:items-center sm:justify-between"
->
+  <a
+    href={href}
+    class="group flex flex-col gap-8 border-b-[0.5px] border-token-primary py-12 transition-all duration-200 hover:bg-token-hover hover:border-token-hover sm:flex-row sm:items-center sm:justify-between"
+  >
   <div
-    class="relative h-64 w-full shrink-0 overflow-hidden rounded-3xl bg-gray-100 border border-gray-200/60 transition-all duration-200 group-hover:border-gray-300/80 order-first sm:order-last sm:h-40 sm:w-64"
+    class="relative h-64 w-full shrink-0 overflow-hidden rounded-3xl bg-token-image border border-token-secondary transition-all duration-200 group-hover:border-token-hover order-first sm:order-last sm:h-40 sm:w-64"
   >
     <img
       src={image}
@@ -24,15 +24,15 @@ const { title, description, date, image, href } = Astro.props;
     />
   </div>
   <div class="flex flex-1 flex-col gap-4 pr-8">
-    <span class="text-[11px] font-bold uppercase tracking-widest text-gray-400"
+    <span class="text-[11px] font-bold uppercase tracking-widest text-token-date"
       >{date}</span
     >
     <h3
-      class="text-2xl font-bold tracking-tight text-gray-900 transition-all duration-200 group-hover:text-gray-800 sm:text-3xl"
+      class="text-2xl font-bold tracking-tight text-token-primary transition-all duration-200 group-hover:text-token-secondary sm:text-3xl"
     >
       {title}
     </h3>
-    <p class="text-[17px] leading-relaxed text-gray-500 line-clamp-2">
+    <p class="text-[17px] leading-relaxed text-token-secondary line-clamp-2">
       {description}
     </p>
   </div>

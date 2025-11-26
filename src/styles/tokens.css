@@ -1,0 +1,76 @@
+/**
+ * 디자인 토큰 정의
+ * 색상, 폰트 등 디자인 시스템의 토큰을 중앙에서 관리
+ */
+
+@theme {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* 배경색 토큰 */
+  --color-bg-primary: #f9fafb;
+  --color-bg-secondary: #ffffff;
+  --color-bg-tertiary: #f3f4f6;
+  --color-bg-code: #f3f4f6;
+  --color-bg-code-block: #1c1c1e;
+  --color-bg-header: rgba(255, 255, 255, 0.8);
+  --color-bg-card: #ffffff;
+  --color-bg-image: #f3f4f6;
+  --color-bg-hover: rgba(249, 250, 251, 0.8);
+
+  /* 텍스트 색상 토큰 */
+  --color-text-primary: #111827;
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #9ca3af;
+  --color-text-code: #db2777;
+  --color-text-code-block: #e5e7eb;
+  --color-text-date: #9ca3af;
+  --color-text-nav: #6b7280;
+
+  /* 테두리 색상 토큰 */
+  --color-border-primary: rgba(229, 231, 235, 0.5);
+  --color-border-secondary: rgba(209, 213, 219, 0.6);
+  --color-border-tertiary: rgba(229, 231, 235, 0.3);
+  --color-border-hover: rgba(209, 213, 219, 0.5);
+
+  /* 링크 색상 토큰 */
+  --color-link: #2563eb;
+  --color-link-hover: #1d4ed8;
+
+  /* 선택 영역 색상 토큰 */
+  --color-selection-bg: rgba(37, 99, 235, 0.2);
+  --color-selection-text: #1e3a8a;
+}
+
+/* 다크모드 색상 토큰 오버라이드 */
+.dark {
+  --color-bg-primary: #1e1e1e;
+  --color-bg-secondary: #252526;
+  --color-bg-tertiary: #252526;
+  --color-bg-code: #252526;
+  --color-bg-code-block: #1e1e1e;
+  --color-bg-header: rgba(37, 37, 38, 0.95);
+  --color-bg-card: #252526;
+  --color-bg-image: #252526;
+  --color-bg-hover: rgba(37, 37, 38, 0.5);
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e5e5e5;
+  --color-text-tertiary: #b3b3b3;
+  --color-text-code: #ce9178;
+  --color-text-code-block: #e5e5e5;
+  --color-text-date: #b3b3b3;
+  --color-text-nav: #b3b3b3;
+
+  --color-border-primary: rgba(62, 62, 66, 1);
+  --color-border-secondary: rgba(80, 80, 80, 0.8);
+  --color-border-tertiary: rgba(62, 62, 66, 0.6);
+  --color-border-hover: rgba(80, 80, 80, 1);
+
+  --color-link: #e5e5e5;
+  --color-link-hover: #ffffff;
+
+  --color-selection-bg: rgba(158, 158, 158, 0.4);
+  --color-selection-text: #e5e5e5;
+}

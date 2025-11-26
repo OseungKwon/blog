@@ -1,104 +1,19 @@
+/**
+ * 메인 스타일 파일
+ * 모든 스타일 모듈을 import하여 통합 관리
+ */
+
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-@theme {
-  --font-sans:
-    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-    'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
+/* 디자인 토큰 정의 */
+@import './tokens.css';
 
-* {
-  box-sizing: border-box;
-}
+/* 기본 스타일 */
+@import './base.css';
 
-html,
-body {
-  @apply bg-gray-50 text-gray-900 antialiased;
-  background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, #f5f5f7 100%);
-  background-attachment: fixed;
-  overscroll-behavior: none;
-}
+/* Prose 스타일 */
+@import './prose.css';
 
-li {
-  margin: 0;
-}
-
-li p {
-  margin: 0;
-}
-
-::selection {
-  @apply bg-blue-500/20 text-blue-900;
-}
-
-@layer components {
-  .prose {
-    @apply max-w-none text-gray-600;
-  }
-
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4 {
-    @apply font-bold tracking-tight text-gray-900;
-  }
-
-  .prose h1 {
-    @apply text-3xl sm:text-4xl mb-8;
-  }
-  .prose h2 {
-    @apply text-2xl sm:text-3xl mt-12 mb-6;
-  }
-  .prose h3 {
-    @apply text-xl sm:text-2xl mt-8 mb-4;
-  }
-
-  .prose p {
-    @apply leading-relaxed mb-6 text-[17px];
-    white-space: pre-line;
-  }
-
-  .prose a {
-    @apply font-medium text-blue-600 no-underline transition-colors hover:text-blue-700 hover:underline;
-  }
-
-  .prose code {
-    @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-[13px] font-medium text-pink-600;
-  }
-
-  /* 인라인 코드의 백틱 숨기기 - Tailwind Typography 오버라이드 */
-  .prose
-    :where(code):not(
-      :where([class~='not-prose'], [class~='not-prose'] *)
-    )::before,
-  .prose
-    :where(code):not(
-      :where([class~='not-prose'], [class~='not-prose'] *)
-    )::after {
-    content: '' !important;
-  }
-
-  .prose pre {
-    @apply my-8 overflow-hidden rounded-3xl border border-gray-200/50 !bg-[#1c1c1e] p-5 shadow-sm;
-  }
-
-  .prose pre code {
-    @apply !bg-transparent p-0 text-[13px] leading-relaxed text-gray-200;
-  }
-
-  .prose img {
-    @apply my-12 rounded-3xl shadow-sm;
-  }
-
-  .prose blockquote {
-    @apply border-l-4 border-gray-200 pl-6 italic text-gray-500;
-  }
-
-  .prose ul {
-    @apply list-disc pl-6 mb-6 space-y-2;
-  }
-
-  .prose ol {
-    @apply list-decimal pl-6 mb-6 space-y-2;
-  }
-}
+/* 유틸리티 클래스 */
+@import './utilities.css';

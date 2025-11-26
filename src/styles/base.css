@@ -1,0 +1,46 @@
+/**
+ * 기본 스타일
+ * 전역적으로 적용되는 기본 스타일 정의
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    var(--color-bg-secondary) 0%,
+    var(--color-bg-tertiary) 100%
+  );
+  background-attachment: fixed;
+  overscroll-behavior: none;
+  @apply antialiased;
+}
+
+html.dark body {
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    var(--color-bg-primary) 0%,
+    var(--color-bg-secondary) 100%
+  );
+}
+
+/* 리스트 기본 스타일 */
+li {
+  margin: 0;
+}
+
+li p {
+  margin: 0;
+}
+
+/* 텍스트 선택 영역 */
+::selection {
+  background-color: var(--color-selection-bg);
+  color: var(--color-selection-text);
+}
+

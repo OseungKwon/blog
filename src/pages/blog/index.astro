@@ -18,10 +18,10 @@ const posts = (await getCollection('blog')).sort(
                 href={`/blog/${post.slug}/`}
                 class="block no-underline group transition-all duration-200"
               >
-                <h4 class="m-0 text-gray-900 leading-none group-hover:text-blue-600 transition-colors">
+                <h4 class="m-0 text-token-primary leading-none group-hover:text-token-secondary transition-colors">
                   {post.data.title}
                 </h4>
-                <p class="m-0 text-gray-500 group-hover:text-blue-600 transition-colors">
+                <p class="m-0 text-token-date group-hover:text-token-secondary transition-colors">
                   {post.data.pubDate.toLocaleDateString('en-us', {
                     year: 'numeric',
                     month: 'short',

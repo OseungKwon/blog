@@ -12,9 +12,9 @@ const { title, description, date, image, href } = Astro.props;
 
 <a
   href={href}
-  class="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 transition-all duration-200 hover:scale-[1.01] hover:shadow-md hover:ring-gray-300/80 hover:bg-gray-50/30"
+  class="group block overflow-hidden rounded-2xl bg-token-card shadow-sm border border-token-primary transition-all duration-200 hover:scale-[1.01] hover:shadow-md hover:border-token-hover hover:bg-token-hover"
 >
-  <div class="aspect-video w-full overflow-hidden bg-gray-100 border-b border-gray-200/60 transition-colors duration-200 group-hover:border-gray-300/80">
+  <div class="aspect-video w-full overflow-hidden bg-token-image border-b border-token-secondary transition-colors duration-200 group-hover:border-token-hover">
     <img
       src={image}
       alt={title}
@@ -22,13 +22,13 @@ const { title, description, date, image, href } = Astro.props;
     />
   </div>
   <div class="flex flex-col gap-2 p-6">
-    <span class="text-xs font-medium text-gray-500">{date}</span>
+    <span class="text-xs font-medium text-token-date">{date}</span>
     <h3
-      class="text-xl font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-200"
+      class="text-xl font-semibold text-token-primary group-hover:text-token-secondary transition-colors duration-200"
     >
       {title}
     </h3>
-    <p class="text-gray-600 line-clamp-2">
+    <p class="text-token-secondary line-clamp-2">
       {description}
     </p>
   </div>
