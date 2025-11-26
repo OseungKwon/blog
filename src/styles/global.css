@@ -52,7 +52,19 @@ body {
   }
 
   .prose code {
-    @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-[13px] font-medium text-pink-600 before:content-[''] after:content-[''];
+    @apply rounded-md bg-gray-100 px-1.5 py-0.5 text-[13px] font-medium text-pink-600;
+  }
+
+  /* 인라인 코드의 백틱 숨기기 - Tailwind Typography 오버라이드 */
+  .prose
+    :where(code):not(
+      :where([class~='not-prose'], [class~='not-prose'] *)
+    )::before,
+  .prose
+    :where(code):not(
+      :where([class~='not-prose'], [class~='not-prose'] *)
+    )::after {
+    content: '' !important;
   }
 
   .prose pre {
