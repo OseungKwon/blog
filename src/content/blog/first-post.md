@@ -2,7 +2,7 @@
 title: 'First Post'
 description: 'This is the first post of my new Astro blog.'
 pubDate: 'Jul 08 2022'
-heroImage: '/placeholder-hero.jpg'
+heroImage: '@assets/blog/placeholder-hero.png'
 ---
 
 # Hello World

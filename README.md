@@ -1,46 +1,54 @@
-# Astro Starter Kit: Basics
+# My Blog
 
-```sh
-pnpm create astro@latest -- --template basics
-```
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+A modern blog built with Astro, featuring content collections and a clean design.
 
 ## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
 
 ```text
 /
 ├── public/
 │   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
+├── src/
+│   ├── assets/
+│   │   └── blog/          # Blog images
+│   ├── components/
+│   │   ├── Header.astro
+│   │   ├── PostCard.astro
+│   │   └── PostListItem.astro
+│   ├── content/
+│   │   ├── blog/          # Blog posts (Markdown)
+│   │   └── config.ts      # Content collections config
+│   ├── layouts/
+│   │   └── Layout.astro
+│   ├── pages/
+│   │   ├── blog/
+│   │   │   └── [...slug].astro
+│   │   └── index.astro
+│   └── styles/
+│       └── global.css
 └── package.json
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
 ## 🧞 Commands
 
-All commands are run from the root of the project, from a terminal:
+All commands are run from the root of the project:
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+| Command        | Action                                       |
+| :------------- | :------------------------------------------- |
+| `pnpm install` | Installs dependencies                        |
+| `pnpm dev`     | Starts local dev server at `localhost:4321`  |
+| `pnpm build`   | Build your production site to `./dist/`      |
+| `pnpm preview` | Preview your build locally, before deploying |
 
-## 👀 Want to learn more?
+## 📝 Writing Blog Posts
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Blog posts are written in Markdown and stored in `src/content/blog/`. Each post should have frontmatter with:
+
+- `title`: Post title
+- `description`: Post description
+- `pubDate`: Publication date
+- `heroImage`: Path to hero image (use `@assets/blog/image.png` format)
+
+## 🎨 Path Aliases
+
+- `@assets/*` → `src/assets/*`
