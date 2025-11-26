@@ -12,7 +12,6 @@ This is my first blog post using **Astro Content Collections**!
 ## Why Astro?
 
 Astro is fast, easy to use, and perfect for content-focused websites.
-
 Here is some code:
 
 ```javascript

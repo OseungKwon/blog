@@ -12,20 +12,32 @@ const { title, description, date, image, href } = Astro.props;
 
 <a
   href={href}
-  class="group flex flex-col gap-6 border-b border-gray-100 py-8 transition-opacity hover:opacity-70 sm:flex-row sm:items-center sm:justify-between"
+  class="group flex flex-col gap-8 border-b-[0.5px] border-gray-200/50 py-12 transition-all hover:bg-gray-50/50 sm:flex-row sm:items-center sm:justify-between"
 >
-  <div class="flex flex-1 flex-col gap-3 pr-4">
-    <span class="text-sm font-medium text-gray-400">{date}</span>
-    <h3 class="text-2xl font-bold tracking-tight text-gray-900">
+  <div class="flex flex-1 flex-col gap-4 pr-8">
+    <span class="text-[11px] font-bold uppercase tracking-widest text-gray-400"
+      >{date}</span
+    >
+    <h3
+      class="text-2xl font-bold tracking-tight text-gray-900 transition-colors group-hover:text-gray-700 sm:text-3xl"
+    >
       {title}
     </h3>
-    <p class="text-base text-gray-500 line-clamp-2">
+    <p class="text-[17px] leading-relaxed text-gray-500 line-clamp-2">
       {description}
     </p>
   </div>
   <div
-    class="h-48 w-full shrink-0 overflow-hidden rounded-xl bg-gray-100 sm:h-32 sm:w-48"
+    class="relative h-64 w-full shrink-0 overflow-hidden rounded-3xl bg-gray-100 shadow-sm transition-all duration-500 group-hover:shadow-md sm:h-40 sm:w-64"
   >
-    <img src={image} alt={title} class="h-full w-full object-cover" />
+    <img
+      src={image}
+      alt={title}
+      class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+    />
+    <div
+      class="absolute inset-0 bg-black/0 transition-colors duration-500 group-hover:bg-black/5"
+    >
+    </div>
   </div>
 </a>

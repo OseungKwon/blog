@@ -16,71 +16,43 @@ const { Content } = await post.render();
 ---
 
 <Layout>
-  <main>
-    <article>
-      <div class="hero-image">
+  <article class="mx-auto max-w-3xl">
+    <div class="mb-12 text-center">
+      <div
+        class="mb-4 text-sm font-bold uppercase tracking-widest text-gray-400"
+      >
         {
-          post.data.heroImage && (
-            <img width={1020} height={510} src={post.data.heroImage} alt="" />
-          )
+          post.data.pubDate.toLocaleDateString('en-us', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
         }
       </div>
-      <div class="prose">
-        <div class="title">
-          <div class="date">
-            {
-              post.data.pubDate.toLocaleDateString('en-us', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })
-            }
-          </div>
-          <h1>{post.data.title}</h1>
-          <hr />
-        </div>
-        <Content />
-      </div>
-    </article>
-  </main>
-</Layout>
+      <h1
+        class="mb-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl"
+      >
+        {post.data.title}
+      </h1>
+      <hr class="mx-auto my-8 h-px w-24 border-0 bg-gray-200" />
+    </div>
 
-<style>
-  main {
-    width: calc(100% - 2em);
-    max-width: 100%;
-    margin: 0;
-  }
-  .hero-image {
-    width: 100%;
-  }
-  .hero-image img {
-    display: block;
-    margin: 0 auto;
-    border-radius: 12px;
-    box-shadow: var(--box-shadow);
-  }
-  .prose {
-    width: 720px;
-    max-width: calc(100% - 2em);
-    margin: auto;
-    padding: 1em;
-    color: rgb(var(--gray-dark));
-  }
-  .title {
-    margin-bottom: 1em;
-    padding: 1em 0;
-    text-align: center;
-    line-height: 1;
-  }
-  .title h1 {
-    margin: 0 0 0.5em 0;
-  }
-  .date {
-    margin-bottom: 0.5em;
-    color: rgb(var(--gray));
-  }
-  .last-updated-on {
-    font-style: italic;
-  }
-</style>
+    {
+      post.data.heroImage && (
+        <div class="mb-12 overflow-hidden rounded-3xl shadow-lg">
+          <img
+            width={1020}
+            height={510}
+            src={post.data.heroImage}
+            alt=""
+            class="w-full object-cover"
+          />
+        </div>
+      )
+    }
+
+    <div class="prose prose-lg prose-gray mx-auto">
+      <Content />
+    </div>
+  </article>
+</Layout>
