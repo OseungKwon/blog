@@ -44,6 +44,7 @@ body {
 
   .prose p {
     @apply leading-relaxed mb-6 text-[17px];
+    white-space: pre-line;
   }
 
   .prose a {
