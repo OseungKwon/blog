@@ -6,7 +6,7 @@ interface Props {
   title?: string;
 }
 
-const { title = 'My Blog' } = Astro.props;
+const { title = '자몽의 기술블로그' } = Astro.props;
 ---
 
 <!doctype html>
@@ -26,7 +26,7 @@ const { title = 'My Blog' } = Astro.props;
     <footer
       class="border-t border-gray-200 bg-white py-8 text-center text-sm text-gray-500"
     >
-      &copy; {new Date().getFullYear()} My Blog. All rights reserved.
+      &copy; {new Date().getFullYear()} 자몽의 기술블로그. All rights reserved.
     </footer>
   </body>
 </html>

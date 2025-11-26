@@ -12,5 +12,12 @@
   },
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "css.validate": false,
+  "tailwindCSS.experimental.classRegex": [
+    ["@apply\\s+([^;]+)", "([^`'\"\\s]+)"]
+  ],
+  "tailwindCSS.includeLanguages": {
+    "astro": "html"
   }
 }
