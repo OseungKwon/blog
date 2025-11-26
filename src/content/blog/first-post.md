@@ -3,6 +3,8 @@ title: 'First Post'
 description: 'This is the first post of my new Astro blog.'
 pubDate: 'Jul 08 2022'
 heroImage: '@assets/blog/placeholder-hero.png'
+category: 'tech'
+tags: ['Dependency Injection', 'Next.js', 'TypeScript', '아키텍처']
 ---
 
 **Dependency Injection(DI)**은 객체가 필요로 하는 **의존성(dependency)을 외부에서 주입받는 디자인 패턴**입니다.

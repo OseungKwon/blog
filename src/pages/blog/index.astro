@@ -5,6 +5,11 @@ import { getCollection } from 'astro:content';
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
+
+const categoryLabels = {
+  book: 'Book',
+  tech: 'Tech',
+};
 ---
 
 <Layout>
@@ -18,16 +23,30 @@ const posts = (await getCollection('blog')).sort(
                 href={`/blog/${post.slug}/`}
                 class="block no-underline group transition-all duration-200"
               >
+                <div class="flex items-center gap-2 mb-1 flex-wrap justify-center max-[720px]:justify-center">
+                  <span class="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-token-category text-token-category">
+                    {categoryLabels[post.data.category]}
+                  </span>
+                  <span class="text-xs text-token-date">
+                    {post.data.pubDate.toLocaleDateString('en-us', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </span>
+                </div>
                 <h4 class="m-0 text-token-primary leading-none group-hover:text-token-secondary transition-colors">
                   {post.data.title}
                 </h4>
-                <p class="m-0 text-token-date group-hover:text-token-secondary transition-colors">
-                  {post.data.pubDate.toLocaleDateString('en-us', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                  })}
-                </p>
+                {post.data.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 mt-2 justify-center max-[720px]:justify-center">
+                    {post.data.tags.map((tag) => (
+                      <span class="text-[11px] px-2 py-0.5 rounded-full bg-token-tertiary text-token-secondary">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </a>
             </li>
           ))

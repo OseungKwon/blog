@@ -23,6 +23,8 @@ const posts = (await getCollection('blog')).sort(
             })}
             image={post.data.heroImage?.src ?? ''}
             href={`/blog/${post.slug}/`}
+            category={post.data.category}
+            tags={post.data.tags}
           />
         ))
       }

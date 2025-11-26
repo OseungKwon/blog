@@ -77,5 +77,13 @@
   .text-token-link-hover {
     color: var(--color-link-hover);
   }
+
+  /* 카테고리 배지 색상 */
+  .bg-token-category {
+    background-color: var(--color-bg-category);
+  }
+  .text-token-category {
+    color: var(--color-text-category);
+  }
 }
 

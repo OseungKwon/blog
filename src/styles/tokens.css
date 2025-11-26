@@ -8,25 +8,50 @@
     -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
     'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
+  /* Gray 스케일 (라이트 모드) */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --color-white: #ffffff;
+
+  /* Gray 스케일 (다크 모드) */
+  --color-dark-gray-50: #1e1e1e;
+  --color-dark-gray-100: #252526;
+  --color-dark-gray-200: #e5e5e5;
+  --color-dark-gray-300: #3e3e42;
+  --color-dark-gray-400: #b3b3b3;
+  --color-dark-gray-500: #505050;
+  --color-dark-gray-600: #505050;
+  --color-dark-gray-700: #3e3e42;
+  --color-dark-gray-800: #252526;
+  --color-dark-gray-900: #1e1e1e;
+
   /* 배경색 토큰 */
-  --color-bg-primary: #f9fafb;
-  --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: #f3f4f6;
-  --color-bg-code: #f3f4f6;
+  --color-bg-primary: var(--color-gray-50);
+  --color-bg-secondary: var(--color-white);
+  --color-bg-tertiary: var(--color-gray-100);
+  --color-bg-code: var(--color-gray-100);
   --color-bg-code-block: #1c1c1e;
   --color-bg-header: rgba(255, 255, 255, 0.8);
-  --color-bg-card: #ffffff;
-  --color-bg-image: #f3f4f6;
+  --color-bg-card: var(--color-white);
+  --color-bg-image: var(--color-gray-100);
   --color-bg-hover: rgba(249, 250, 251, 0.8);
 
   /* 텍스트 색상 토큰 */
-  --color-text-primary: #111827;
-  --color-text-secondary: #4b5563;
-  --color-text-tertiary: #9ca3af;
-  --color-text-code: #db2777;
-  --color-text-code-block: #e5e7eb;
-  --color-text-date: #9ca3af;
-  --color-text-nav: #6b7280;
+  --color-text-primary: var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-tertiary: var(--color-gray-400);
+  --color-text-code: var(--color-gray-600);
+  --color-text-code-block: var(--color-gray-200);
+  --color-text-date: var(--color-gray-400);
+  --color-text-nav: var(--color-gray-500);
 
   /* 테두리 색상 토큰 */
   --color-border-primary: rgba(229, 231, 235, 0.5);
@@ -41,36 +66,49 @@
   /* 선택 영역 색상 토큰 */
   --color-selection-bg: rgba(37, 99, 235, 0.2);
   --color-selection-text: #1e3a8a;
+
+  /* 카테고리 배지 색상 토큰 */
+  --color-bg-category: var(--color-gray-700);
+  --color-text-category: var(--color-white);
 }
 
 /* 다크모드 색상 토큰 오버라이드 */
 .dark {
-  --color-bg-primary: #1e1e1e;
-  --color-bg-secondary: #252526;
-  --color-bg-tertiary: #252526;
-  --color-bg-code: #252526;
-  --color-bg-code-block: #1e1e1e;
+  /* 배경색 토큰 */
+  --color-bg-primary: var(--color-dark-gray-900);
+  --color-bg-secondary: var(--color-dark-gray-100);
+  --color-bg-tertiary: var(--color-dark-gray-100);
+  --color-bg-code: var(--color-dark-gray-100);
+  --color-bg-code-block: var(--color-dark-gray-900);
   --color-bg-header: rgba(37, 37, 38, 0.95);
-  --color-bg-card: #252526;
-  --color-bg-image: #252526;
+  --color-bg-card: var(--color-dark-gray-100);
+  --color-bg-image: var(--color-dark-gray-100);
   --color-bg-hover: rgba(37, 37, 38, 0.5);
 
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #e5e5e5;
-  --color-text-tertiary: #b3b3b3;
+  /* 텍스트 색상 토큰 */
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: var(--color-dark-gray-200);
+  --color-text-tertiary: var(--color-dark-gray-400);
   --color-text-code: #ce9178;
-  --color-text-code-block: #e5e5e5;
-  --color-text-date: #b3b3b3;
-  --color-text-nav: #b3b3b3;
+  --color-text-code-block: var(--color-dark-gray-200);
+  --color-text-date: var(--color-dark-gray-400);
+  --color-text-nav: var(--color-dark-gray-400);
 
+  /* 테두리 색상 토큰 */
   --color-border-primary: rgba(62, 62, 66, 1);
   --color-border-secondary: rgba(80, 80, 80, 0.8);
   --color-border-tertiary: rgba(62, 62, 66, 0.6);
   --color-border-hover: rgba(80, 80, 80, 1);
 
-  --color-link: #e5e5e5;
-  --color-link-hover: #ffffff;
+  /* 링크 색상 토큰 */
+  --color-link: var(--color-dark-gray-200);
+  --color-link-hover: var(--color-white);
 
+  /* 선택 영역 색상 토큰 */
   --color-selection-bg: rgba(158, 158, 158, 0.4);
-  --color-selection-text: #e5e5e5;
+  --color-selection-text: var(--color-dark-gray-200);
+
+  /* 카테고리 배지 색상 토큰 */
+  --color-bg-category: var(--color-dark-gray-200);
+  --color-text-category: var(--color-dark-gray-900);
 }

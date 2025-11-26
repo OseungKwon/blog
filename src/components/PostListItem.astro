@@ -5,9 +5,16 @@ interface Props {
   date: string;
   image: string;
   href: string;
+  category: 'book' | 'tech';
+  tags: string[];
 }
 
-const { title, description, date, image, href } = Astro.props;
+const { title, description, date, image, href, category, tags } = Astro.props;
+
+const categoryLabels = {
+  book: 'Book',
+  tech: 'Tech',
+};
 ---
 
   <a
@@ -24,9 +31,14 @@ const { title, description, date, image, href } = Astro.props;
     />
   </div>
   <div class="flex flex-1 flex-col gap-4 pr-8">
-    <span class="text-[11px] font-bold uppercase tracking-widest text-token-date"
-      >{date}</span
-    >
+    <div class="flex items-center gap-3 flex-wrap">
+      <span class="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-token-category text-token-category">
+        {categoryLabels[category]}
+      </span>
+      <span class="text-[11px] font-bold uppercase tracking-widest text-token-date"
+        >{date}</span
+      >
+    </div>
     <h3
       class="text-2xl font-bold tracking-tight text-token-primary transition-all duration-200 group-hover:text-token-secondary sm:text-3xl"
     >
@@ -35,5 +47,14 @@ const { title, description, date, image, href } = Astro.props;
     <p class="text-[17px] leading-relaxed text-token-secondary line-clamp-2">
       {description}
     </p>
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-1.5">
+        {tags.map((tag) => (
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-token-tertiary text-token-secondary">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    )}
   </div>
 </a>
