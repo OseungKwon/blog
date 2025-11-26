@@ -2,7 +2,7 @@
 title: 'DI를 사용한 코드 리팩토링'
 description: 'DI, 왜 필요할까? Next.js SSR 환경에서 깨달은 의존성 주입의 힘'
 pubDate: '2025.11.27'
-heroImage: '@assets/blog/placeholder-hero.png'
+heroImage: '@assets/post/placeholder-hero.png'
 category: 'tech'
 tags: ['Dependency Injection', 'Next.js', 'TypeScript', '아키텍처']
 ---
