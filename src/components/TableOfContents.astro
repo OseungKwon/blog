@@ -120,7 +120,8 @@
           ) as HTMLElement | null;
           if (activeLink) {
             activeLink.classList.add('active');
-            activeLink.style.color = 'var(--color-link)';
+            // 라이트/다크 모드 모두 동일한 파란색 사용
+            activeLink.style.color = '#2563eb';
           }
         }
       }
@@ -166,5 +167,10 @@
 
   .toc-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--color-text-tertiary);
+  }
+
+  /* 다크 모드에서도 동일한 파란색 사용 */
+  :global(.dark) .toc-link.active {
+    color: #2563eb !important;
   }
 </style>
