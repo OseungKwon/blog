@@ -207,7 +207,7 @@ window.onNativeBackButtonClick = function () {
 
 이를 안전하게 처리하기 위해, React가 로드되기 전에 가장 먼저 실행되는 **초기화 스크립트**를 `index.html`에 추가했습니다.
 
-이 스크립트는 네이티브가 보낸 데이터를 **큐에 쌓아 두었다가**, React 쪽에서 “준비 완료” 신호를 보내면(`useEffect`에서 mount 호출) 그때 한꺼번에 리스너들에게 전달합니다.
+이 스크립트는 네이티브가 보낸 데이터를 **큐에 쌓아 두었다가**, React에서 “준비 완료” 신호를 보내면(`useEffect`에서 mount 호출) 그때 한꺼번에 리스너들에게 전달합니다.
 
 ### 초기화 스크립트 구현
 
@@ -270,7 +270,7 @@ window.onNativeBackButtonClick = function () {
 
 2. **Mount (동기화):** React 앱이 로딩을 마치고 `useEffect`에서 `bridge.mount()`를 호출하는 순간, 큐에 쌓여 있던 데이터들이 한 번에 리스너들에게 전달됩니다.
 
-### React 쪽 사용 예시
+### 사용 예시
 
 ```tsx
 import { NativeBridgeProvider } from './NativeBridgeContext';
