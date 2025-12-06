@@ -52,7 +52,7 @@
   .prose p {
     @apply leading-relaxed mb-6 text-[17px];
     white-space: pre-line;
-    color: var(--color-text-secondary) !important;
+    color: var(--color-text-primary) !important;
   }
 
   /* 링크 스타일 */

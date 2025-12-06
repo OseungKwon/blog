@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry, getCollection } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -16,44 +17,48 @@ const { Content } = await post.render();
 ---
 
 <Layout>
-  <article class="mx-auto max-w-3xl">
-    <div class="mb-12 text-center">
-      <div
-        class="mb-4 text-sm font-bold uppercase tracking-widest text-token-date"
-      >
-        {
-          post.data.pubDate.toLocaleDateString('en-us', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-          })
-        }
-      </div>
-      <h1
-        class="mb-6 text-4xl font-bold tracking-tight text-token-primary sm:text-5xl"
-      >
-        {post.data.title}
-      </h1>
-      <hr class="mx-auto my-8 h-px w-24 border-0 border-token-primary" />
-    </div>
-
-    {
-      post.data.heroImage && (
-        <div class="mb-12 overflow-hidden rounded-3xl shadow-sm">
-          <img
-            width={1020}
-            height={510}
-            src={post.data.heroImage.src}
-            alt=""
-            class="w-full object-cover"
-          />
+  <div class="relative">
+    <article class="mx-auto max-w-3xl">
+      <div class="mb-12 text-center">
+        <div
+          class="mb-4 text-sm font-bold uppercase tracking-widest text-token-date"
+        >
+          {
+            post.data.pubDate.toLocaleDateString('en-us', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
+          }
         </div>
-      )
-    }
+        <h1
+          class="mb-6 text-4xl font-bold tracking-tight text-token-primary sm:text-5xl"
+        >
+          {post.data.title}
+        </h1>
+        <hr class="mx-auto my-8 h-px w-24 border-0 border-token-primary" />
+      </div>
 
-    <div class="prose prose-lg prose-gray mx-auto">
-      <Content />
-    </div>
-  </article>
+      {
+        post.data.heroImage && (
+          <div class="mb-12 overflow-hidden rounded-3xl shadow-sm">
+            <img
+              width={1020}
+              height={510}
+              src={post.data.heroImage.src}
+              alt=""
+              class="w-full object-cover"
+            />
+          </div>
+        )
+      }
+
+      <div class="prose prose-lg prose-gray mx-auto">
+        <Content />
+      </div>
+    </article>
+
+    <!-- Table of Contents (우측 고정) -->
+    <TableOfContents />
+  </div>
 </Layout>
-
