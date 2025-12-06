@@ -75,10 +75,10 @@
         }
       });
 
-      // 클릭 시 부드러운 스크롤
+      // 클릭 시 바로 이동
       a.addEventListener('click', (e) => {
         e.preventDefault();
-        headingElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        headingElement.scrollIntoView({ behavior: 'auto', block: 'start' });
 
         // URL 업데이트
         history.pushState(null, '', `#${headingElement.id}`);
