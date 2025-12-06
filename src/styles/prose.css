@@ -109,6 +109,12 @@
     color: var(--color-text-tertiary) !important;
   }
 
+  /* blockquote 내부 따옴표 제거 */
+  .prose blockquote p::before,
+  .prose blockquote p::after {
+    content: '' !important;
+  }
+
   /* 리스트 스타일 */
   .prose ul {
     @apply list-disc pl-6 mb-6 space-y-2;
