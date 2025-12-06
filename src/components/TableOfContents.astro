@@ -59,19 +59,19 @@
         h3: 'pl-8 text-[0.8125rem]',
       };
 
-      // 기본 스타일 적용 (더 연한 색상)
-      a.style.color = 'var(--color-text-tertiary)';
+      // 기본 스타일 적용
+      a.style.color = 'var(--color-text-secondary)';
       a.className = `${baseClasses} ${levelClasses[level as keyof typeof levelClasses] || ''}`;
 
       // 호버 시 색상만 진하게 (active 상태가 아닐 때만)
       a.addEventListener('mouseenter', () => {
         if (!a.classList.contains('active')) {
-          a.style.color = 'var(--color-text-secondary)';
+          a.style.color = 'var(--color-text-primary)';
         }
       });
       a.addEventListener('mouseleave', () => {
         if (!a.classList.contains('active')) {
-          a.style.color = 'var(--color-text-tertiary)';
+          a.style.color = 'var(--color-text-secondary)';
         }
       });
 
@@ -107,7 +107,7 @@
       document.querySelectorAll('a[href^="#"]').forEach((link) => {
         if (link instanceof HTMLElement) {
           link.classList.remove('active');
-          link.style.color = 'var(--color-text-tertiary)';
+          link.style.color = 'var(--color-text-secondary)';
         }
       });
 
