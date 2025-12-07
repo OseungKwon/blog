@@ -267,14 +267,13 @@ export function Button({ className, size, children, ...props }: ButtonProps) {
 ```tsx
 common-components/
   ├── Button/
-  │    ├── Button.tsx
+  │    ├── Button.component.tsx
   │    ├── Button.stories.tsx
   │    └── Button.types.ts
   ├── Toast/
-  │    ├── Toast.tsx
+  │    ├── Toast.component.tsx
   │    ├── ToastProvider.tsx
   │    ├── useToast.ts  // 훅도 컴포넌트 옆으로 이동
-  │    └── toast.css.ts
   └── ...
 ```
 
