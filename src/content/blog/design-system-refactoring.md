@@ -10,8 +10,8 @@ tags:
     'React',
     '컴포넌트 아키텍처',
     '프론트엔드',
-    'Co-location',
     'Compound Components',
+    'Figma',
   ]
 ---
 
