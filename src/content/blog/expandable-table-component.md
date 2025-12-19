@@ -59,11 +59,11 @@ tags: ['React', '컴포넌트', '디자인 시스템', '가상화', '컴파운�
 
 - **불필요한 전체 리렌더링**: 체크박스 하나를 클릭해 상태가 변할 때마다, 테이블 전체가 다시 그려지면서 모든 로우의 컴포넌트 함수가 `재실행`되고 있었습니다.
 
-### 2. 해결책: 가상화(Virtualization) 기술 도입
+### 2. 해결책: 가상화(`Virtualization`) 기술 도입
 
-이 문제를 해결하기 위해 **가상화(Virtualization)** 기술을 도입했습니다.
+이 문제를 해결하기 위해 **가상화(`Virtualization`)** 기술을 도입했습니다.
 
-> **가상화(Windowing)란?**
+> **가상화란?**
 > 수천 개의 데이터가 있더라도 사용자의 화면(Viewport)에 실제로 보이는 수십 개의 로우만 DOM에 렌더링하고, 보이지 않는 나머지 데이터는 메모리상에만 유지하는 기법입니다.
 > 사용자가 스크롤을 할 때마다 필요한 부분의 DOM만 빠르게 교체하여 렌더링 성능을 극대화합니다.
 
@@ -150,6 +150,49 @@ export function TableBody<T>({
 HTML의 `<select>`와 `<option>` 태그 관계처럼, 부모 컴포넌트가 전체적인 상태를 관리하고 자식 컴포넌트들이 그 상태를 공유하며 각자의 UI를 담당하는 구조를 말합니다.
 
 컴파운드 컴포넌트 패턴을 도입해 페이지네이션, 무한 스크롤 등의 부가 기능을 테이블 컴포넌트를 직접 수정하지 않고도 추가할 수 있는 구조로 만들었습니다.
+
+### 추가 고려: 어떤 형식으로 사용되어야 할까?
+
+처음에는 다음과 같은 구조를 생각했습니다.
+
+```tsx
+<Table>
+  <Table.Header>
+    <Table.HeaderCell width={80}>타이틀1</Table.HeaderCell>
+    <Table.HeaderCell width={100}>타이틀2</Table.HeaderCell>
+  </Table.Header>
+  <Table.Body>
+    <Table.BodyCell width={80}>{데이터1}</Table.BodyCell>
+    <Table.BodyCell width={100}>{데이터2}</Table.BodyCell>
+  </Table.Body>
+</Table>
+```
+
+하지만 이 구조는 header와 body의 관계를 파악하기 위해 몇 번째 위치에 있는지 일일히 파악을 해야 했습니다.
+셀이 많아지게 된다면 분명 header나 body의 셀을 누락하는 휴먼 이슈가 발생할 것이 보였습니다.
+
+이 구조를 개선하기 위해 데이터 관리의 주체를 `Table 루트 컴포넌트`로 한정하고, 나머지 하위 컴포넌트는 이를 받아 사용하도록 했습니다.
+
+```tsx
+const table = {
+    data1: {
+        header: '타이틀1',
+        width: 80,
+        cell: '데이터1'
+    },
+    data2: {
+        header: '타이틀2',
+        width: 100,
+        cell: '데이터2'
+    }
+}
+<Table table={table}>
+  <Table.Header />
+  <Table.Body />
+</Table>
+```
+
+이 구조를 통해 `header cell`과 `body cell`에 대한 동기화/유지보수 이슈를 해결할 수 있었고, `Context API`를 활용해 table 설정 객체를 `Table 루트 컴포넌트`에서 주입받아 `Context`에 저장하면, `HeaderCell`이나 `BodyCell`까지 복잡한 `Props Drilling` 없이도 설정 정보에 접근할 수 있게 되었습니다.
 
 ### 컴포넌트 구조 및 사용 예시
 
