@@ -7,22 +7,20 @@ category: 'tech'
 tags: ['Zustand', '상태 관리 라이브러리', 'React', 'useSyncExternalStore']
 ---
 
-Zustand는 작고 빠르며 확장 가능한 React 프로젝트에서 사용하는 상태 관리 라이브러리입니다.
+`Zustand`는 작고 빠르며 확장 가능한 React 프로젝트에서 사용하는 상태 관리 라이브러리입니다.
 
-이전에 redux, recoil 등등의 상태 관리 라이브러리를 써왔지만,
-redux의 경우 보일러 플레이트가 많고 복잡하다는 단점이 있고, recoil은 더 이상 라이브러리의 업데이트가 이뤄지지 않는다는 단점이 있었습니다.
+이전에 `redux`, `recoil` 등등의 상태 관리 라이브러리를 써왔지만, `redux`의 경우 보일러 플레이트가 많고 복잡하다는 단점이 있고, `recoil`은 더 이상 라이브러리의 업데이트가 이뤄지지 않는다는 단점이 있었습니다.
 
 이러한 상황 속에서 zustand 라이브러리는 간결하고 경령화된 라이브러리로 점차 인기를 얻고 있습니다.
 
 zustand가 인기가 많아지고 있는 비결에는 다음과 같은 특징들이 있습니다.
 
-- 간결한 api: 복잡성 없이 간단하게 사용 가능
-- 경량화: 가벼운 라이브러리 크기
-- 유연성: middleware를 통한 확장 가능
-- 성능: 최소한의 상태 변경과 렌더링으로 동작
+- **간결한 api**: 복잡성 없이 간단하게 사용 가능
+- **경량화**: 가벼운 라이브러리 크기
+- **유연성**: middleware를 통한 확장 가능
+- **성능**: 최소한의 상태 변경과 렌더링으로 동작
 
-내부적으로 어떻게 동작하는지 알면, 코드적으로도 좋은 인사이트가 될 것 같고, 라이브러리에 대한 이해도를 더 잘 가져갈 수 있을 것 같아
-이번 기회에 **zustand 라이브러리 코드 분석하기**라는 주제로 글을 쓰게 되었습니다.
+내부적으로 어떻게 동작하는지 알면, 코드적으로도 좋은 인사이트가 될 것 같고, 라이브러리에 대한 이해도를 더 잘 가져갈 수 있을 것 같아 이번 기회에 **zustand 라이브러리 코드 분석하기**라는 주제로 글을 쓰게 되었습니다.
 
 ## zustand로 상태 관리하기
 
@@ -267,28 +265,15 @@ export function useStore<TState, StateSlice>(
 
 **React18** 이전에는 이보다 더 긴 코드로 작성되었지만, **React18**에서 `useSyncExternalStore`를 지원하면서 코드가 간소화 되었습니다.
 
-`useSyncExternalStore는` 인자로 `subscribe`, `getSnapshot`, `getServerSnapshot`을 받는데, `subscribe` 인자를 받아 내부적으로 구독과 구독 해제를 관리합니다.
+`useSyncExternalStore`는 인자로 `subscribe`, `getSnapshot`, `getServerSnapshot`을 받는데, `subscribe` 인자를 받아 내부적으로 구독과 구독 해제를 관리합니다.
 
-> React.useSyncExternalStore: external state의 변경사항을 관찰하고 있다가, tearing이 발생하지 않도록 상태 변경이 관찰되면 다시 렌더링을 시작합니다.
+> `React.useSyncExternalStore`: external state의 변경사항을 관찰하고 있다가, tearing이 발생하지 않도록 상태 변경이 관찰되면 다시 렌더링을 시작합니다.
 
 ```tsx
 const snapshot = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot?)
 ```
 
 따라서 외부 스토어를 구독해 스토어에 있는 데이터의 스냅샷을 반환하며, React는 컴포넌트가 스토어를 구독한 상태로 유지하고 변경 사항이 있을 때 다시 렌더링합니다.
-
-## 정리
-
-마지막으로 처음에 잠깐 보여드렸던 zustand 기초 예제를 기반으로 동작 흐름을 정리하겠습니다.
-
-```tsx
-import { create } from 'zustand';
-
-const useStore = create((set) => ({
-  count: 1,
-  inc: () => set((state) => ({ count: state.count + 1 })),
-}));
-```
 
 ## 참고
 
