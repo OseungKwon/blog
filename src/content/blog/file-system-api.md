@@ -4,7 +4,7 @@ description: 'File System API 소개 및 FileSystemWritableFileStream 자세히 
 pubDate: '2026.01.21'
 heroImage: '@assets/post/file-system-api/1.png'
 category: 'tech'
-tags: ['Zustand', '상태 관리 라이브러리', 'React', 'useSyncExternalStore']
+tags: ['Web APIs', 'File System API', 'FileSystemWritableFileStream', '스트리밍 다운로드', '대용량 파일 다운로드']
 ---
 
 웹 애플리케이션에서 로컬 파일 시스템에 접근하는 방식은, 과거의 제한적인 샌드박스 형태에서 벗어나 네이티브 앱 수준의 제어가 가능한 **File System API**로 진화했습니다. 
