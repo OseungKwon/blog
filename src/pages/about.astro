@@ -1,7 +1,33 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 
 const BASE = import.meta.env.BASE_URL;
+const formatMonth = (date: string) => date.replace('-', '.');
+const projects = await Promise.all(
+  (await getCollection('career'))
+    .sort((a, b) => a.data.order - b.data.order)
+    .map(async (project) => ({
+      ...project,
+      Content: (await project.render()).Content,
+    })),
+);
+const projectYears = [
+  ...new Set(
+    projects.flatMap(({ data }) => [
+      data.startDate.slice(0, 4),
+      data.endDate.slice(0, 4),
+    ]),
+  ),
+].sort();
+const projectYearsLabel =
+  projectYears.length > 1
+    ? `${projectYears[0]}—${projectYears.at(-1)}`
+    : (projectYears[0] ?? '');
+const lastUpdated = projects.reduce(
+  (latest, { data }) => (data.endDate > latest ? data.endDate : latest),
+  '',
+);
 ---
 
 <Layout
@@ -19,15 +45,26 @@ const BASE = import.meta.env.BASE_URL;
 
       <div class="contact-list">
         <a href="mailto:00osos@naver.com">00osos@naver.com</a>
-        <a href="https://github.com/oseungkwon" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://github.com/oseungkwon"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           github.com/oseungkwon
         </a>
         <a href={BASE}>자몽의 기술블로그</a>
       </div>
 
-      <button class="print-button press" type="button" data-print-resume data-print-hidden>
+      <button
+        class="print-button press"
+        type="button"
+        data-print-resume
+        data-print-hidden
+      >
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z" />
+          <path
+            d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"
+          ></path>
         </svg>
         PDF로 저장
       </button>
@@ -36,175 +73,74 @@ const BASE = import.meta.env.BASE_URL;
     <section class="projects-section" aria-labelledby="projects-title">
       <div class="section-title">
         <h2 id="projects-title">주요 프로젝트</h2>
-        <span>2 projects · 2026</span>
+        <span>{projects.length} projects · {projectYearsLabel}</span>
       </div>
 
       <div class="project-stack">
-        <article class="project-card surface">
-          <header class="project-header">
-            <div class="project-meta">
-              <span>AI Development</span>
-              <time datetime="2026-03/2026-05">2026.03 — 2026.05</time>
-            </div>
-            <h3>AI 개발 워크플로우 · 하네스 엔지니어링</h3>
-            <p class="project-role">
-              워크플로우 설계 · 코드 품질 자동화 · Figma 연동 훅 개발
-            </p>
-          </header>
+        {
+          projects.map(({ data, Content }) => (
+            <article class="project-card surface">
+              <header class="project-header">
+                <div class="project-meta">
+                  <span>{data.category}</span>
+                  <time datetime={`${data.startDate}/${data.endDate}`}>
+                    {formatMonth(data.startDate)} — {formatMonth(data.endDate)}
+                  </time>
+                </div>
+                <h3>{data.title}</h3>
+                <p class="project-role">{data.roles.join(' · ')}</p>
+              </header>
 
-          <section class="project-change" aria-label="프로젝트 변화 요약">
-            <div class="diff-line diff-delete">
-              <span class="diff-sign" aria-hidden="true">−</span>
-              <small>before</small>
-              <strong>문서 중심 활용 · 수동 검증</strong>
-            </div>
-            <div class="diff-line diff-add">
-              <span class="diff-sign" aria-hidden="true">+</span>
-              <small>after</small>
-              <strong>단계형 워크플로우 · 자동 품질 검증</strong>
-            </div>
-            <p class="diff-impact">
-              <span>@@ impact @@</span>
-              <strong>AI 도구 실행 −34% · 작업 시간 −21% · 전달 데이터 최대 −70%</strong>
-            </p>
-          </section>
+              <section class="project-change" aria-label="프로젝트 변화 요약">
+                <div class="diff-line diff-delete">
+                  <span class="diff-sign" aria-hidden="true">
+                    −
+                  </span>
+                  <small>before</small>
+                  <strong>{data.change.before}</strong>
+                </div>
+                <div class="diff-line diff-add">
+                  <span class="diff-sign" aria-hidden="true">
+                    +
+                  </span>
+                  <small>after</small>
+                  <strong>{data.change.after}</strong>
+                </div>
+                <p class="diff-impact">
+                  <span>@@ impact @@</span>
+                  <strong>{data.change.impact}</strong>
+                </p>
+              </section>
 
-          <div class="project-content">
-            <section>
-              <h4>AI 개발 워크플로우 표준화</h4>
-              <p>
-                전사적인 AI 도입 이후 개발자마다 활용 방식이 달라, 같은 요구사항에서도
-                개발 시간과 결과물의 품질에 편차가 발생했습니다. 기존에는 개발자가 많은
-                문서를 먼저 확인한 뒤 AI를 사용했고, 문서 간 내용이 다르거나 요구사항을
-                충분히 파악하지 못한 상태에서 개발이 시작되는 경우가 있었습니다.
-              </p>
-              <p>
-                이를 AI와 단계적으로 상호작용하며 요구사항의 일관성을 먼저 확인하고,
-                필요한 문서를 생성하는 방식으로 변경했습니다. 그 결과 개발자가 사전에
-                확인할 문서량을 기존의 <strong>약 1/3 수준</strong>으로 줄였습니다.
-              </p>
-            </section>
+              <div class="project-content">
+                <Content />
+              </div>
 
-            <section>
-              <h4>AI 코드 품질 및 개발 규칙 자동화</h4>
-              <p>
-                워크플로우를 표준화한 뒤에도 AI가 프로젝트에서 사용하지 않는 개발 방식을
-                적용하거나 기존 규칙을 따르지 않는 문제가 남았습니다. 공통 개발 패턴을
-                정리하고 Linter, Type Checker, Hook을 연계해 코드 작성 과정에서 잘못된
-                구현을 자동으로 검증하도록 구성했습니다.
-              </p>
-              <p>
-                문서 가이드에 의존하던 규칙을 실행 환경으로 옮긴 결과, 동일 작업을
-                기준으로 <strong>AI 도구 실행 횟수는 34%, 소요 시간은 21%</strong>
-                감소했습니다.
-              </p>
-            </section>
-
-            <section>
-              <h4>Figma 연동 훅을 통한 UI 개발 품질 개선</h4>
-              <p>
-                Figma MCP를 연동한 뒤에도 AI가 공통 컴포넌트를 재사용하지 않거나
-                디자인과 다른 UI를 생성했습니다. 전달 데이터를 분석한 결과, 일부 수정된
-                Figma 인스턴스를 MCP가 공통 컴포넌트로 인식하지 못했고 반복되는 디자인
-                구조를 매번 전체 HTML로 전달하고 있었습니다.
-              </p>
-              <p>
-                Figma API와 PostToolUse Hook을 사용해 컴포넌트 정보를 복원하고 중복
-                데이터를 제거했습니다. AI가 공통 컴포넌트를 선택할 수 있는 정보를
-                보완하면서 Figma가 전달하는 데이터를 <strong>최대 70%</strong>
-                줄였습니다.
-              </p>
-            </section>
-          </div>
-
-          <footer class="project-footer">
-            <span>관련 기술 글</span>
-            <a href={`${BASE}post/figma-mcp-design-system-hook/`}>
-              Figma MCP가 준 코드, 정말 디자인 시스템을 쓰고 있나요?
-              <span aria-hidden="true">↗</span>
-            </a>
-          </footer>
-        </article>
-
-        <article class="project-card surface">
-          <header class="project-header">
-            <div class="project-meta">
-              <span>Product Development</span>
-              <time datetime="2026-07/2026-08">2026.07 — 2026.08</time>
-            </div>
-            <h3>웹 주문·결제 시스템 구축</h3>
-            <p class="project-role">
-              서비스 기획 · 요구사항 정의 · 기술 설계 · 프론트엔드 개발
-            </p>
-          </header>
-
-          <section class="project-change" aria-label="프로젝트 변화 요약">
-            <div class="diff-line diff-delete">
-              <span class="diff-sign" aria-hidden="true">−</span>
-              <small>before</small>
-              <strong>메뉴 탐색 후 앱 설치 필요</strong>
-            </div>
-            <div class="diff-line diff-add">
-              <span class="diff-sign" aria-hidden="true">+</span>
-              <small>after</small>
-              <strong>웹에서 주문·결제까지 완료</strong>
-            </div>
-            <p class="diff-impact">
-              <span>@@ impact @@</span>
-              <strong>객단가 ×3 · 결제 전환 20% · 앱 설치 전환 1/3+</strong>
-            </p>
-          </section>
-
-          <div class="project-content">
-            <section>
-              <h4>주문·인증 플로우 설계</h4>
-              <p>
-                기존 웹은 매장과 메뉴 탐색만 가능했고, 실제 주문을 위해서는 앱을 설치해야
-                했습니다. 주문 과정의 중간 이탈을 줄이기 위해 인증을 결제 직전까지
-                미뤘습니다. 외부 인증 페이지에서 돌아와도 장바구니와 결제 입력값이
-                유지되도록 상태 보존 구조도 함께 설계했습니다.
-              </p>
-              <p>
-                인증 복귀 후에는 재고, 가격, 매장 상태, 회원 할인을 다시 검증해 품절이나
-                금액 변경에도 결제를 이어갈 수 있도록 구성했습니다.
-              </p>
-            </section>
-
-            <section>
-              <h4>프론트엔드 아키텍처 설계</h4>
-              <p>
-                결제 기능이 확장되면서 재고, 옵션, 가격, 할인처럼 서로 영향을 주는 정책과
-                예외 케이스가 빠르게 늘어났습니다. 화면과 상태 관리 로직에서 정책을 직접
-                처리하면 변경 사항이 여러 컴포넌트로 전파되는 문제가 있었습니다.
-              </p>
-              <p>
-                FSD를 기반으로 도메인 규칙, 비즈니스 유즈케이스, UI의 책임을
-                분리했습니다. 재고 검증, 가격 계산, 할인 적용은 상태 관리와 독립된 순수
-                함수로 구성했습니다. 정책을 UI 수정 없이 도메인 로직 단위에서 반영하고
-                테스트할 수 있게 했으며, QA 과정의 정책 변경에도 수정 범위를
-                제한했습니다.
-              </p>
-            </section>
-
-            <section>
-              <h4>출시 성과</h4>
-              <p>
-                출시 후 웹 주문의 <strong>객단가는 앱의 약 3배</strong>를 기록했고,
-                메뉴를 담은 사용자의 <strong>약 20%가 결제를 완료</strong>했습니다.
-                결제 고객의 <strong>3명 중 1명 이상은 앱 설치로 전환</strong>됐으며,
-                절반 이상이 마케팅 수신에 동의했습니다.
-              </p>
-            </section>
-          </div>
-
-          <!-- 공개 가능한 서비스 주소나 화면이 생기면 project-footer를 추가합니다. -->
-        </article>
+              {data.links.length > 0 && (
+                <footer class="project-footer">
+                  {data.links.map((link) => (
+                    <div class="project-link-row">
+                      <span>{link.type}</span>
+                      <a
+                        href={link.external ? link.href : `${BASE}${link.href}`}
+                        target={link.external ? '_blank' : undefined}
+                        rel={link.external ? 'noopener noreferrer' : undefined}
+                      >
+                        {link.label} <span aria-hidden="true">↗</span>
+                      </a>
+                    </div>
+                  ))}
+                </footer>
+              )}
+            </article>
+          ))
+        }
       </div>
     </section>
 
     <footer class="resume-footer">
       <span>권오승 · Frontend Engineer</span>
-      <span>Updated 2026.08</span>
+      <span>Updated {formatMonth(lastUpdated)}</span>
     </footer>
   </article>
 </Layout>
@@ -486,13 +422,13 @@ const BASE = import.meta.env.BASE_URL;
     margin-top: 2.5rem;
   }
 
-  .project-content section + section {
+  .project-content :global(h2:not(:first-child)) {
     margin-top: 2.5rem;
     padding-top: 2.5rem;
     border-top: 1px solid var(--resume-rule);
   }
 
-  .project-content h4 {
+  .project-content :global(h2) {
     font-size: 1.1rem;
     font-weight: 700;
     line-height: 1.45;
@@ -501,7 +437,7 @@ const BASE = import.meta.env.BASE_URL;
     word-break: keep-all;
   }
 
-  .project-content p {
+  .project-content :global(p) {
     margin-top: 0.85rem;
     font-size: 0.9rem;
     line-height: 1.85;
@@ -509,25 +445,30 @@ const BASE = import.meta.env.BASE_URL;
     word-break: keep-all;
   }
 
-  .project-content p + p {
+  .project-content :global(p + p) {
     margin-top: 0.75rem;
   }
 
-  .project-content strong {
+  .project-content :global(strong) {
     font-weight: 700;
     color: var(--color-text-primary);
   }
 
   .project-footer {
     display: grid;
-    grid-template-columns: 5rem minmax(0, 1fr);
-    gap: 1rem;
+    gap: 0.75rem;
     margin-top: 2.5rem;
     padding-top: 1.25rem;
     border-top: 1px dashed var(--resume-rule);
   }
 
-  .project-footer > span {
+  .project-link-row {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .project-link-row > span {
     padding-top: 0.12rem;
     font-family: var(--font-mono);
     font-size: 0.6rem;
@@ -605,7 +546,7 @@ const BASE = import.meta.env.BASE_URL;
       gap: 0.35rem;
     }
 
-    .project-footer {
+    .project-link-row {
       grid-template-columns: 1fr;
       gap: 0.5rem;
     }
@@ -688,7 +629,7 @@ const BASE = import.meta.env.BASE_URL;
 
     .project-header,
     .project-change,
-    .project-content section,
+    .project-content :global(h2),
     .project-footer {
       break-inside: avoid;
     }
@@ -701,12 +642,12 @@ const BASE = import.meta.env.BASE_URL;
       margin-top: 7mm;
     }
 
-    .project-content section + section {
+    .project-content :global(h2:not(:first-child)) {
       margin-top: 6mm;
       padding-top: 6mm;
     }
 
-    .project-content p {
+    .project-content :global(p) {
       font-size: 8.4pt;
       line-height: 1.72;
     }
@@ -727,7 +668,9 @@ const BASE = import.meta.env.BASE_URL;
 </style>
 
 <script>
-  document.querySelector('[data-print-resume]')?.addEventListener('click', () => {
-    window.print();
-  });
+  document
+    .querySelector('[data-print-resume]')
+    ?.addEventListener('click', () => {
+      window.print();
+    });
 </script>
