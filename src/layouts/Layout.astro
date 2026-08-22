@@ -13,6 +13,7 @@ interface Props {
   modifiedTime?: string;
   tags?: string[];
   wide?: boolean;
+  profile?: boolean;
 }
 
 const SITE_NAME = '자몽의 기술블로그';
@@ -31,6 +32,7 @@ const {
   modifiedTime,
   tags = [],
   wide = false,
+  profile = false,
 } = Astro.props;
 
 const pageTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
@@ -45,7 +47,24 @@ const ogImageHeight = resolvedImage.height;
 
 // JSON-LD 구조화 데이터
 const jsonLd =
-  article
+  profile
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'ProfilePage',
+        name: title,
+        description,
+        url: canonical.href,
+        inLanguage: 'ko',
+        mainEntity: {
+          '@type': 'Person',
+          name: '권오승',
+          alternateName: AUTHOR,
+          jobTitle: '프론트엔드 개발자',
+          url: canonical.href,
+          sameAs: ['https://github.com/oseungkwon'],
+        },
+      }
+    : article
     ? {
         '@context': 'https://schema.org',
         '@type': 'BlogPosting',
@@ -117,7 +136,7 @@ const jsonLd =
     />
 
     <!-- Open Graph / 소셜 공유 -->
-    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:type" content={profile ? 'profile' : article ? 'article' : 'website'} />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
