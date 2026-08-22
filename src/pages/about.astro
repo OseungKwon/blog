@@ -32,6 +32,28 @@ const lastUpdated = projects.reduce(
   (latest, { data }) => (data.endDate > latest ? data.endDate : latest),
   '',
 );
+const indexedProjects = projects.map((project, projectIndex) => ({
+  ...project,
+  projectIndex,
+}));
+type IndexedProject = (typeof indexedProjects)[number];
+const projectGroups = indexedProjects
+  .reduce<Array<{ year: string; projects: IndexedProject[] }>>(
+    (groups, project) => {
+      const year = project.data.endDate.slice(0, 4);
+      const group = groups.find((item) => item.year === year);
+
+      if (group) {
+        group.projects.push(project);
+      } else {
+        groups.push({ year, projects: [project] });
+      }
+
+      return groups;
+    },
+    [],
+  )
+  .sort((a, b) => b.year.localeCompare(a.year));
 ---
 
 <Layout
@@ -74,126 +96,170 @@ const lastUpdated = projects.reduce(
       </button>
     </header>
 
+    <dl class="career-overview" aria-label="경력 요약">
+      <div>
+        <dt>회사</dt>
+        <dd>패스오더</dd>
+      </div>
+      <div>
+        <dt>경력</dt>
+        <dd>Frontend Engineer · 4년</dd>
+      </div>
+      <div class="career-focus">
+        <dt>주요 영역</dt>
+        <dd>주문·결제 · 프론트엔드 아키텍처 · AI 개발 환경</dd>
+      </div>
+    </dl>
+
     <section class="projects-section" aria-labelledby="projects-title">
       <div class="section-title">
         <div class="section-heading">
           <h2 id="projects-title">패스오더 주요 프로젝트</h2>
           <span class="section-meta">
-            프로젝트 {projects.length}개 · {projectYearsLabel}
+            {projects.length}개 · {projectYearsLabel}
           </span>
         </div>
 
-        <div
-          class="project-view-filter"
-          role="group"
-          aria-label="프로젝트 표시 방식"
+        <button
+          class="project-expand-all"
+          type="button"
+          aria-controls="project-list"
+          aria-expanded="false"
+          data-project-expand-all
           data-print-hidden
         >
-          <button type="button" data-project-view="brief" aria-pressed="true">
-            간략하게 보기
-          </button>
-          <button type="button" data-project-view="detail" aria-pressed="false">
-            자세히 보기
-          </button>
-        </div>
+          <span data-project-expand-label>전체 펼치기</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="m4 6 4 4 4-4"></path>
+          </svg>
+        </button>
       </div>
 
-      <div class="project-stack">
+      <div class="project-year-list" id="project-list">
         {
-          projects.map(({ id, data, Content }, projectIndex) => (
-            <details class="project-entry surface" id={`project-${id}`}>
-              <summary class="project-summary">
-                <div class="project-summary-main">
-                  <span class="print-project-index" aria-hidden="true">
-                    프로젝트 {String(projectIndex + 1).padStart(2, '0')}
-                  </span>
-                  <div class="project-title-row">
-                    <h3>{data.title}</h3>
-                    <time datetime={`${data.startDate}/${data.endDate}`}>
-                      {formatMonth(data.startDate)} —{' '}
-                      {formatMonth(data.endDate)}
-                    </time>
-                  </div>
-                  <p>{data.summary}</p>
-                  <dl class="project-facts">
-                    <div>
-                      <dt>성과</dt>
-                      <dd>
-                        <strong>{data.change.impact}</strong>
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>기술</dt>
-                      <dd>
-                        <ul class="technology-list" aria-label="사용 기술">
-                          {data.technologies.map((technology) => (
-                            <li>{technology}</li>
-                          ))}
-                        </ul>
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
+          projectGroups.map(({ year, projects: yearProjects }) => (
+            <section
+              class="project-year-group"
+              aria-labelledby={`project-year-${year}`}
+            >
+              <header class="project-year-heading">
+                <h3 id={`project-year-${year}`}>{year}</h3>
+                <span>{yearProjects.length}개 프로젝트</span>
+              </header>
 
-                <span class="project-toggle" aria-hidden="true">
-                  <span class="project-toggle-open">상세 보기</span>
-                  <span class="project-toggle-close">접기</span>
-                  <svg viewBox="0 0 16 16">
-                    <path d="m4 6 4 4 4-4" />
-                  </svg>
-                </span>
-              </summary>
-
-              <article class="project-detail">
-                <p class="project-role">{data.roles.join(' · ')}</p>
-
-                <section class="project-change" aria-label="프로젝트 변화 요약">
-                  <div class="diff-line diff-delete">
-                    <span class="diff-sign" aria-hidden="true">
-                      −
-                    </span>
-                    <small>before</small>
-                    <strong>{data.change.before}</strong>
-                  </div>
-                  <div class="diff-line diff-add">
-                    <span class="diff-sign" aria-hidden="true">
-                      +
-                    </span>
-                    <small>after</small>
-                    <strong>{data.change.after}</strong>
-                  </div>
-                  <p class="diff-impact">
-                    <span>@@ impact @@</span>
-                    <strong>{data.change.impact}</strong>
-                  </p>
-                </section>
-
-                <div class="project-content">
-                  <Content />
-                </div>
-
-                {data.links.length > 0 && (
-                  <footer class="project-footer">
-                    {data.links.map((link) => (
-                      <div class="project-link-row">
-                        <span>{link.type}</span>
-                        <a
-                          href={
-                            link.external ? link.href : `${BASE}${link.href}`
-                          }
-                          target={link.external ? '_blank' : undefined}
-                          rel={
-                            link.external ? 'noopener noreferrer' : undefined
-                          }
-                        >
-                          {link.label} <span aria-hidden="true">↗</span>
-                        </a>
+              <div class="project-stack">
+                {yearProjects.map(({ id, data, Content, projectIndex }) => (
+                  <details class="project-entry surface" id={`project-${id}`}>
+                    <summary class="project-summary">
+                      <div class="project-summary-main">
+                        <span class="print-project-index" aria-hidden="true">
+                          프로젝트 {String(projectIndex + 1).padStart(2, '0')}
+                        </span>
+                        <div class="project-title-row">
+                          <h4>{data.title}</h4>
+                          <time datetime={`${data.startDate}/${data.endDate}`}>
+                            {formatMonth(data.startDate)} —{' '}
+                            {formatMonth(data.endDate)}
+                          </time>
+                        </div>
+                        <div class="project-summary-lead">
+                          <p>{data.summary}</p>
+                          {data.links.length > 0 && (
+                            <ul
+                              class="project-proof-list"
+                              aria-label="프로젝트 링크"
+                            >
+                              {data.links.map((link) => (
+                                <li>
+                                  <a
+                                    class="project-proof-link"
+                                    href={
+                                      link.external
+                                        ? link.href
+                                        : `${BASE}${link.href}`
+                                    }
+                                    target={
+                                      link.external ? '_blank' : undefined
+                                    }
+                                    rel={
+                                      link.external
+                                        ? 'noopener noreferrer'
+                                        : undefined
+                                    }
+                                    aria-label={`${link.type}: ${link.label}`}
+                                    title={link.label}
+                                  >
+                                    {link.type}{' '}
+                                    <span aria-hidden="true">↗</span>
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                        <dl class="project-facts">
+                          <div>
+                            <dt>성과</dt>
+                            <dd>
+                              <strong>{data.change.impact}</strong>
+                            </dd>
+                          </div>
+                          <div>
+                            <dt>기술</dt>
+                            <dd>
+                              <ul
+                                class="technology-list"
+                                aria-label="사용 기술"
+                              >
+                                {data.technologies.map((technology) => (
+                                  <li>{technology}</li>
+                                ))}
+                              </ul>
+                            </dd>
+                          </div>
+                        </dl>
                       </div>
-                    ))}
-                  </footer>
-                )}
-              </article>
-            </details>
+
+                      <span class="project-toggle" aria-hidden="true">
+                        <span class="project-toggle-open">펼치기</span>
+                        <span class="project-toggle-close">접기</span>
+                        <svg viewBox="0 0 16 16">
+                          <path d="m4 6 4 4 4-4" />
+                        </svg>
+                      </span>
+                    </summary>
+
+                    <article class="project-detail">
+                      <p class="project-role">{data.roles.join(' · ')}</p>
+
+                      <section
+                        class="project-change"
+                        aria-label="프로젝트 변화 요약"
+                      >
+                        <div class="diff-line diff-delete">
+                          <span class="diff-sign" aria-hidden="true">
+                            −
+                          </span>
+                          <small>before</small>
+                          <strong>{data.change.before}</strong>
+                        </div>
+                        <div class="diff-line diff-add">
+                          <span class="diff-sign" aria-hidden="true">
+                            +
+                          </span>
+                          <small>after</small>
+                          <strong>{data.change.after}</strong>
+                        </div>
+                      </section>
+
+                      <div class="project-content">
+                        <Content />
+                      </div>
+                    </article>
+                  </details>
+                ))}
+              </div>
+            </section>
           ))
         }
       </div>
@@ -241,7 +307,7 @@ const lastUpdated = projects.reduce(
 
   .identity > p {
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: 0.72rem;
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -264,7 +330,7 @@ const lastUpdated = projects.reduce(
   }
 
   .contact-list a {
-    font-size: 0.73rem;
+    font-size: 0.8rem;
     line-height: 1.35;
     color: var(--color-text-secondary);
   }
@@ -283,7 +349,7 @@ const lastUpdated = projects.reduce(
     border-radius: 999px;
     background: var(--surface-bg);
     color: var(--color-text-primary);
-    font-size: 0.73rem;
+    font-size: 0.78rem;
     font-weight: 650;
     cursor: pointer;
   }
@@ -299,9 +365,47 @@ const lastUpdated = projects.reduce(
 
   .print-button:focus-visible,
   .contact-list a:focus-visible,
-  .project-footer a:focus-visible {
+  .project-proof-link:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
+  }
+
+  .career-overview {
+    display: grid;
+    grid-template-columns: 0.7fr 1.15fr 2fr;
+    margin: 1rem 0.5rem 0;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--resume-rule);
+  }
+
+  .career-overview > div {
+    min-width: 0;
+    padding-inline: 1rem;
+  }
+
+  .career-overview > div:first-child {
+    padding-left: 0;
+  }
+
+  .career-overview > div + div {
+    border-left: 1px solid var(--resume-rule);
+  }
+
+  .career-overview dt {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--color-text-date);
+  }
+
+  .career-overview dd {
+    margin-top: 0.35rem;
+    font-size: 0.86rem;
+    font-weight: 650;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    word-break: keep-all;
   }
 
   .project-summary:focus-visible {
@@ -336,47 +440,87 @@ const lastUpdated = projects.reduce(
 
   .section-meta {
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.72rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-text-date);
   }
 
-  .project-view-filter {
-    display: inline-grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0.2rem;
+  .project-expand-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.1rem;
+    padding-inline: 0.8rem;
     border: 1px solid var(--resume-rule);
-    border-radius: 0.7rem;
+    border-radius: 999px;
     background: var(--surface-bg);
-  }
-
-  .project-view-filter button {
-    min-height: 1.9rem;
-    padding-inline: 0.7rem;
-    border: 0;
-    border-radius: 0.5rem;
-    background: transparent;
     color: var(--color-text-secondary);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 650;
     cursor: pointer;
   }
 
-  .project-view-filter button[aria-pressed='true'] {
-    background: var(--color-accent);
-    color: white;
+  .project-expand-all:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--color-accent) 38%,
+      var(--resume-rule)
+    );
+    color: var(--color-accent);
   }
 
-  .project-view-filter button:focus-visible {
+  .project-expand-all:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+  }
+
+  .project-expand-all svg {
+    width: 0.75rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 160ms ease;
+  }
+
+  .project-expand-all[aria-expanded='true'] svg {
+    transform: rotate(180deg);
+  }
+
+  .project-year-list {
+    display: grid;
+    gap: 2rem;
+    margin-top: 1.25rem;
+  }
+
+  .project-year-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0.5rem 0.65rem;
+    border-bottom: 1px solid var(--resume-rule);
+  }
+
+  .project-year-heading h3 {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--color-text-primary);
+  }
+
+  .project-year-heading span {
+    font-size: 0.75rem;
+    color: var(--color-text-date);
   }
 
   .project-stack {
     display: grid;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 0.85rem;
   }
 
   .project-entry {
@@ -429,7 +573,7 @@ const lastUpdated = projects.reduce(
     padding-left: 0.9rem;
     border-left: 1px solid var(--resume-rule);
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.76rem;
     font-weight: 600;
     line-height: 1.5;
     letter-spacing: 0.04em;
@@ -437,7 +581,7 @@ const lastUpdated = projects.reduce(
     white-space: nowrap;
   }
 
-  .project-summary-main h3 {
+  .project-summary-main h4 {
     font-size: 1.2rem;
     font-weight: 720;
     line-height: 1.35;
@@ -449,12 +593,43 @@ const lastUpdated = projects.reduce(
     display: none;
   }
 
-  .project-summary-main > p {
+  .project-summary-lead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.45rem 0.85rem;
     margin-top: 0.45rem;
-    font-size: 0.82rem;
+  }
+
+  .project-summary-lead > p {
+    font-size: 0.88rem;
     line-height: 1.65;
     color: var(--color-text-secondary);
     word-break: keep-all;
+  }
+
+  .project-proof-list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+  }
+
+  .project-proof-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.76rem;
+    font-weight: 680;
+    line-height: 1.5;
+    color: var(--color-accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .project-proof-link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .project-facts {
@@ -473,7 +648,7 @@ const lastUpdated = projects.reduce(
   }
 
   .project-facts dt {
-    font-size: 0.72rem;
+    font-size: 0.78rem;
     font-weight: 720;
     line-height: 1.5;
     color: var(--color-accent);
@@ -484,7 +659,7 @@ const lastUpdated = projects.reduce(
   }
 
   .project-facts dd > strong {
-    font-size: 0.82rem;
+    font-size: 0.88rem;
     font-weight: 680;
     line-height: 1.6;
     color: var(--color-text-primary);
@@ -503,7 +678,7 @@ const lastUpdated = projects.reduce(
     border: 1px solid var(--resume-rule);
     border-radius: 0.3rem;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.74rem;
     font-weight: 620;
     line-height: 1.35;
     color: var(--color-text-secondary);
@@ -515,12 +690,11 @@ const lastUpdated = projects.reduce(
     align-items: center;
     justify-content: center;
     gap: 0.35rem;
-    min-width: 5.25rem;
-    height: 2rem;
-    padding-inline: 0.7rem;
-    border: 1px solid var(--resume-rule);
-    border-radius: 999px;
-    font-size: 0.67rem;
+    min-width: auto;
+    min-height: 2rem;
+    padding-inline: 0.15rem;
+    border: 0;
+    font-size: 0.75rem;
     font-weight: 680;
     line-height: 1;
     color: var(--color-text-date);
@@ -549,12 +723,11 @@ const lastUpdated = projects.reduce(
     display: inline;
   }
 
-  .project-entry[open] .project-summary-main h3 {
+  .project-entry[open] .project-summary-main h4 {
     color: var(--color-accent);
   }
 
   .project-entry[open] .project-toggle {
-    border-color: var(--color-accent);
     color: var(--color-accent);
   }
 
@@ -564,7 +737,7 @@ const lastUpdated = projects.reduce(
 
   .project-detail {
     margin: 0;
-    padding: 1.75rem 2.5rem 2.5rem;
+    padding: 1.5rem 2.5rem 2rem;
     border-top: 1px solid var(--resume-rule);
     opacity: 0;
     transform: translateY(-0.4rem);
@@ -579,7 +752,7 @@ const lastUpdated = projects.reduce(
   }
 
   .project-role {
-    font-size: 0.7rem;
+    font-size: 0.76rem;
     line-height: 1.55;
     color: var(--color-text-secondary);
     word-break: keep-all;
@@ -654,37 +827,13 @@ const lastUpdated = projects.reduce(
     word-break: keep-all;
   }
 
-  .diff-impact {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    padding: 0.58rem 0.75rem;
-    border-top: 1px solid var(--resume-rule);
-    background: var(--color-bg-card);
-  }
-
-  .diff-impact > span {
-    flex: none;
-    font-family: var(--font-mono);
-    font-size: 0.55rem;
-    color: var(--color-accent);
-  }
-
-  .diff-impact strong {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    line-height: 1.55;
-    color: var(--color-text-primary);
-  }
-
   .project-content {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
   }
 
   .project-content :global(h2:not(:first-child)) {
-    margin-top: 2.5rem;
-    padding-top: 2.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
     border-top: 1px solid var(--resume-rule);
   }
 
@@ -700,7 +849,7 @@ const lastUpdated = projects.reduce(
   .project-content :global(p) {
     margin-top: 0.85rem;
     font-size: 0.9rem;
-    line-height: 1.85;
+    line-height: 1.75;
     color: var(--color-text-secondary);
     word-break: keep-all;
   }
@@ -714,36 +863,6 @@ const lastUpdated = projects.reduce(
     color: var(--color-text-primary);
   }
 
-  .project-footer {
-    display: grid;
-    gap: 0.75rem;
-    margin-top: 2.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px dashed var(--resume-rule);
-  }
-
-  .project-link-row {
-    display: grid;
-    grid-template-columns: 5rem minmax(0, 1fr);
-    gap: 1rem;
-  }
-
-  .project-link-row > span {
-    padding-top: 0.12rem;
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    letter-spacing: 0.07em;
-    color: var(--color-text-date);
-  }
-
-  .project-footer a {
-    width: fit-content;
-    font-size: 0.78rem;
-    font-weight: 620;
-    line-height: 1.5;
-    color: var(--color-accent);
-  }
-
   .resume-footer {
     display: flex;
     justify-content: space-between;
@@ -751,7 +870,7 @@ const lastUpdated = projects.reduce(
     margin-top: 1rem;
     padding-inline: 0.5rem;
     font-family: var(--font-mono);
-    font-size: 0.55rem;
+    font-size: 0.65rem;
     letter-spacing: 0.04em;
     color: var(--color-text-date);
   }
@@ -778,6 +897,28 @@ const lastUpdated = projects.reduce(
       grid-row: 1;
     }
 
+    .career-overview {
+      grid-template-columns: 1fr 1.45fr;
+      margin-inline: 0;
+      padding-block: 0.9rem;
+    }
+
+    .career-overview > div {
+      padding-inline: 0.75rem;
+    }
+
+    .career-overview > div:first-child {
+      padding-left: 0;
+    }
+
+    .career-overview .career-focus {
+      grid-column: 1 / -1;
+      margin-top: 0.85rem;
+      padding: 0.85rem 0 0;
+      border-top: 1px solid var(--resume-rule);
+      border-left: 0;
+    }
+
     .projects-section {
       margin-top: 2.5rem;
     }
@@ -792,8 +933,12 @@ const lastUpdated = projects.reduce(
       justify-content: space-between;
     }
 
-    .project-view-filter {
-      width: 100%;
+    .project-expand-all {
+      align-self: flex-end;
+    }
+
+    .project-year-list {
+      gap: 1.6rem;
     }
 
     .project-summary {
@@ -813,6 +958,12 @@ const lastUpdated = projects.reduce(
       border-left: 0;
     }
 
+    .project-summary-lead {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
     .project-toggle {
       grid-column: 2;
       grid-row: 1;
@@ -830,21 +981,11 @@ const lastUpdated = projects.reduce(
     .diff-line small {
       padding-left: 0.55rem;
     }
-
-    .diff-impact {
-      align-items: flex-start;
-      flex-direction: column;
-      gap: 0.35rem;
-    }
-
-    .project-link-row {
-      grid-template-columns: 1fr;
-      gap: 0.5rem;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .project-summary,
+    .project-expand-all svg,
     .project-toggle svg,
     .project-detail,
     .project-entry::details-content {
@@ -916,6 +1057,29 @@ const lastUpdated = projects.reduce(
       display: none;
     }
 
+    .career-overview {
+      grid-template-columns: 0.7fr 1.15fr 2fr;
+      margin: 3mm 0 0;
+      padding: 3.5mm 0;
+    }
+
+    .career-overview > div {
+      padding-inline: 4mm;
+    }
+
+    .career-overview > div:first-child {
+      padding-left: 0;
+    }
+
+    .career-overview dt {
+      font-size: 6.5pt;
+    }
+
+    .career-overview dd {
+      margin-top: 1mm;
+      font-size: 8pt;
+    }
+
     .projects-section {
       margin-top: 7mm;
     }
@@ -932,9 +1096,18 @@ const lastUpdated = projects.reduce(
       font-size: 7pt;
     }
 
-    .project-stack {
+    .project-year-list {
       display: block;
       margin-top: 8mm;
+    }
+
+    .project-year-heading {
+      display: none;
+    }
+
+    .project-stack {
+      display: block;
+      margin-top: 0;
     }
 
     .project-entry {
@@ -952,7 +1125,13 @@ const lastUpdated = projects.reduce(
       break-before: page;
     }
 
-    .project-entry + .project-entry::before {
+    .project-year-group:not(:first-child) .project-entry:first-child {
+      padding-top: 14mm;
+      break-before: page;
+    }
+
+    .project-entry + .project-entry::before,
+    .project-year-group:not(:first-child) .project-entry:first-child::before {
       content: '권오승 · Frontend Engineer';
       display: block;
       margin-bottom: 8mm;
@@ -987,7 +1166,7 @@ const lastUpdated = projects.reduce(
       gap: 4mm;
     }
 
-    .project-summary-main h3 {
+    .project-summary-main h4 {
       font-size: 16pt;
       line-height: 1.25;
       color: var(--color-text-primary) !important;
@@ -999,10 +1178,18 @@ const lastUpdated = projects.reduce(
       font-size: 7.5pt;
     }
 
-    .project-summary-main > p {
+    .project-summary-lead {
       margin-top: 2mm;
+      gap: 2mm;
+    }
+
+    .project-summary-lead > p {
       font-size: 9pt;
       line-height: 1.55;
+    }
+
+    .project-proof-link {
+      font-size: 7.5pt;
     }
 
     .project-facts {
@@ -1061,8 +1248,7 @@ const lastUpdated = projects.reduce(
 
     .project-summary,
     .project-change,
-    .project-content :global(h2),
-    .project-footer {
+    .project-content :global(h2) {
       break-inside: avoid;
     }
 
@@ -1100,11 +1286,6 @@ const lastUpdated = projects.reduce(
       line-height: 1.68;
     }
 
-    .project-footer {
-      margin-top: 5mm;
-      padding-top: 4mm;
-    }
-
     .resume-footer {
       display: none;
     }
@@ -1120,36 +1301,44 @@ const lastUpdated = projects.reduce(
   const projectEntries = Array.from(
     document.querySelectorAll<HTMLDetailsElement>('.project-entry'),
   );
-  const projectViewButtons = Array.from(
-    document.querySelectorAll<HTMLButtonElement>('[data-project-view]'),
+  const projectExpandAll = document.querySelector<HTMLButtonElement>(
+    '[data-project-expand-all]',
+  );
+  const projectExpandLabel = document.querySelector<HTMLElement>(
+    '[data-project-expand-label]',
   );
   let projectOpenStates: boolean[] = [];
 
-  const syncProjectView = () => {
-    const allOpen = projectEntries.every((project) => project.open);
+  const syncProjectExpandAll = () => {
+    const allOpen =
+      projectEntries.length > 0 &&
+      projectEntries.every((project) => project.open);
 
-    projectViewButtons.forEach((button) => {
-      const isBrief = button.dataset.projectView === 'brief';
-      button.setAttribute(
-        'aria-pressed',
-        String((isBrief && !allOpen) || (!isBrief && allOpen)),
-      );
-    });
+    projectExpandAll?.setAttribute('aria-expanded', String(allOpen));
+    if (projectExpandLabel) {
+      projectExpandLabel.textContent = allOpen ? '전체 접기' : '전체 펼치기';
+    }
   };
 
-  projectViewButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const shouldOpen = button.dataset.projectView === 'detail';
-      projectEntries.forEach((project) => {
-        project.open = shouldOpen;
-      });
-      syncProjectView();
+  projectExpandAll?.addEventListener('click', () => {
+    const shouldOpen = !projectEntries.every((project) => project.open);
+    projectEntries.forEach((project) => {
+      project.open = shouldOpen;
     });
+    syncProjectExpandAll();
   });
 
   projectEntries.forEach((project) => {
-    project.addEventListener('toggle', syncProjectView);
+    project.addEventListener('toggle', syncProjectExpandAll);
   });
+
+  document
+    .querySelectorAll<HTMLAnchorElement>('.project-proof-link')
+    .forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.stopPropagation();
+      });
+    });
 
   const openLinkedProject = () => {
     if (!window.location.hash) return;
@@ -1183,5 +1372,5 @@ const lastUpdated = projects.reduce(
   });
 
   openLinkedProject();
-  syncProjectView();
+  syncProjectExpandAll();
 </script>
