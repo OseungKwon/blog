@@ -6,7 +6,11 @@ const BASE = import.meta.env.BASE_URL;
 const formatMonth = (date: string) => date.replace('-', '.');
 const projects = await Promise.all(
   (await getCollection('career'))
-    .sort((a, b) => a.data.order - b.data.order)
+    .sort(
+      (a, b) =>
+        b.data.endDate.localeCompare(a.data.endDate) ||
+        a.data.order - b.data.order,
+    )
     .map(async (project) => ({
       ...project,
       Content: (await project.render()).Content,
@@ -72,67 +76,124 @@ const lastUpdated = projects.reduce(
 
     <section class="projects-section" aria-labelledby="projects-title">
       <div class="section-title">
-        <h2 id="projects-title">주요 프로젝트</h2>
-        <span>{projects.length} projects · {projectYearsLabel}</span>
+        <div class="section-heading">
+          <h2 id="projects-title">패스오더 주요 프로젝트</h2>
+          <span class="section-meta">
+            프로젝트 {projects.length}개 · {projectYearsLabel}
+          </span>
+        </div>
+
+        <div
+          class="project-view-filter"
+          role="group"
+          aria-label="프로젝트 표시 방식"
+          data-print-hidden
+        >
+          <button type="button" data-project-view="brief" aria-pressed="true">
+            간략하게 보기
+          </button>
+          <button type="button" data-project-view="detail" aria-pressed="false">
+            자세히 보기
+          </button>
+        </div>
       </div>
 
       <div class="project-stack">
         {
-          projects.map(({ data, Content }) => (
-            <article class="project-card surface">
-              <header class="project-header">
-                <div class="project-meta">
-                  <span>{data.category}</span>
-                  <time datetime={`${data.startDate}/${data.endDate}`}>
-                    {formatMonth(data.startDate)} — {formatMonth(data.endDate)}
-                  </time>
-                </div>
-                <h3>{data.title}</h3>
-                <p class="project-role">{data.roles.join(' · ')}</p>
-              </header>
-
-              <section class="project-change" aria-label="프로젝트 변화 요약">
-                <div class="diff-line diff-delete">
-                  <span class="diff-sign" aria-hidden="true">
-                    −
+          projects.map(({ id, data, Content }, projectIndex) => (
+            <details class="project-entry surface" id={`project-${id}`}>
+              <summary class="project-summary">
+                <div class="project-summary-main">
+                  <span class="print-project-index" aria-hidden="true">
+                    프로젝트 {String(projectIndex + 1).padStart(2, '0')}
                   </span>
-                  <small>before</small>
-                  <strong>{data.change.before}</strong>
-                </div>
-                <div class="diff-line diff-add">
-                  <span class="diff-sign" aria-hidden="true">
-                    +
-                  </span>
-                  <small>after</small>
-                  <strong>{data.change.after}</strong>
-                </div>
-                <p class="diff-impact">
-                  <span>@@ impact @@</span>
-                  <strong>{data.change.impact}</strong>
-                </p>
-              </section>
-
-              <div class="project-content">
-                <Content />
-              </div>
-
-              {data.links.length > 0 && (
-                <footer class="project-footer">
-                  {data.links.map((link) => (
-                    <div class="project-link-row">
-                      <span>{link.type}</span>
-                      <a
-                        href={link.external ? link.href : `${BASE}${link.href}`}
-                        target={link.external ? '_blank' : undefined}
-                        rel={link.external ? 'noopener noreferrer' : undefined}
-                      >
-                        {link.label} <span aria-hidden="true">↗</span>
-                      </a>
+                  <div class="project-title-row">
+                    <h3>{data.title}</h3>
+                    <time datetime={`${data.startDate}/${data.endDate}`}>
+                      {formatMonth(data.startDate)} —{' '}
+                      {formatMonth(data.endDate)}
+                    </time>
+                  </div>
+                  <p>{data.summary}</p>
+                  <dl class="project-facts">
+                    <div>
+                      <dt>성과</dt>
+                      <dd>
+                        <strong>{data.change.impact}</strong>
+                      </dd>
                     </div>
-                  ))}
-                </footer>
-              )}
-            </article>
+                    <div>
+                      <dt>기술</dt>
+                      <dd>
+                        <ul class="technology-list" aria-label="사용 기술">
+                          {data.technologies.map((technology) => (
+                            <li>{technology}</li>
+                          ))}
+                        </ul>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <span class="project-toggle" aria-hidden="true">
+                  <span class="project-toggle-open">상세 보기</span>
+                  <span class="project-toggle-close">접기</span>
+                  <svg viewBox="0 0 16 16">
+                    <path d="m4 6 4 4 4-4" />
+                  </svg>
+                </span>
+              </summary>
+
+              <article class="project-detail">
+                <p class="project-role">{data.roles.join(' · ')}</p>
+
+                <section class="project-change" aria-label="프로젝트 변화 요약">
+                  <div class="diff-line diff-delete">
+                    <span class="diff-sign" aria-hidden="true">
+                      −
+                    </span>
+                    <small>before</small>
+                    <strong>{data.change.before}</strong>
+                  </div>
+                  <div class="diff-line diff-add">
+                    <span class="diff-sign" aria-hidden="true">
+                      +
+                    </span>
+                    <small>after</small>
+                    <strong>{data.change.after}</strong>
+                  </div>
+                  <p class="diff-impact">
+                    <span>@@ impact @@</span>
+                    <strong>{data.change.impact}</strong>
+                  </p>
+                </section>
+
+                <div class="project-content">
+                  <Content />
+                </div>
+
+                {data.links.length > 0 && (
+                  <footer class="project-footer">
+                    {data.links.map((link) => (
+                      <div class="project-link-row">
+                        <span>{link.type}</span>
+                        <a
+                          href={
+                            link.external ? link.href : `${BASE}${link.href}`
+                          }
+                          target={link.external ? '_blank' : undefined}
+                          rel={
+                            link.external ? 'noopener noreferrer' : undefined
+                          }
+                        >
+                          {link.label} <span aria-hidden="true">↗</span>
+                        </a>
+                      </div>
+                    ))}
+                  </footer>
+                )}
+              </article>
+            </details>
           ))
         }
       </div>
@@ -243,25 +304,37 @@ const lastUpdated = projects.reduce(
     outline-offset: 3px;
   }
 
+  .project-summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -3px;
+    border-radius: inherit;
+  }
+
   .projects-section {
     margin-top: 3rem;
   }
 
   .section-title {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
     padding-inline: 0.5rem;
   }
 
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
   .section-title h2 {
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: 720;
     letter-spacing: -0.015em;
   }
 
-  .section-title span {
+  .section-meta {
     font-family: var(--font-mono);
     font-size: 0.62rem;
     letter-spacing: 0.08em;
@@ -269,64 +342,251 @@ const lastUpdated = projects.reduce(
     color: var(--color-text-date);
   }
 
+  .project-view-filter {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0.2rem;
+    border: 1px solid var(--resume-rule);
+    border-radius: 0.7rem;
+    background: var(--surface-bg);
+  }
+
+  .project-view-filter button {
+    min-height: 1.9rem;
+    padding-inline: 0.7rem;
+    border: 0;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--color-text-secondary);
+    font-size: 0.68rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .project-view-filter button[aria-pressed='true'] {
+    background: var(--color-accent);
+    color: white;
+  }
+
+  .project-view-filter button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
   .project-stack {
     display: grid;
-    gap: 2rem;
+    gap: 1rem;
     margin-top: 1rem;
   }
 
-  .project-card {
+  .project-entry {
+    overflow: clip;
+    border-radius: 1.2rem;
+    interpolate-size: allow-keywords;
+  }
+
+  .project-entry::details-content {
+    block-size: 0;
     overflow: hidden;
-    border-radius: 1.5rem;
-    padding: clamp(1.5rem, 4vw, 3rem);
+    transition:
+      block-size 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      content-visibility 280ms allow-discrete;
   }
 
-  .project-meta {
+  .project-entry[open]::details-content {
+    block-size: auto;
+  }
+
+  .project-summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.75rem 2rem;
+    cursor: pointer;
+    list-style: none;
+    transition:
+      color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .project-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .project-summary:hover {
+    background: color-mix(in srgb, var(--color-accent) 3%, transparent);
+  }
+
+  .project-title-row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.6rem 0.9rem;
   }
 
-  .project-meta span,
-  .project-meta time {
+  .project-title-row time {
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--resume-rule);
     font-family: var(--font-mono);
-    font-size: 0.64rem;
-    font-weight: 550;
+    font-size: 0.7rem;
+    font-weight: 600;
     line-height: 1.5;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .project-meta span {
-    color: var(--color-accent);
-  }
-
-  .project-meta time {
+    letter-spacing: 0.04em;
     color: var(--color-text-date);
     white-space: nowrap;
   }
 
-  .project-header h3 {
-    max-width: 42rem;
-    margin-top: 1rem;
-    font-size: clamp(1.65rem, 3.2vw, 2.35rem);
-    font-weight: 730;
-    line-height: 1.2;
-    letter-spacing: -0.035em;
+  .project-summary-main h3 {
+    font-size: 1.2rem;
+    font-weight: 720;
+    line-height: 1.35;
+    letter-spacing: -0.025em;
     word-break: keep-all;
   }
 
+  .print-project-index {
+    display: none;
+  }
+
+  .project-summary-main > p {
+    margin-top: 0.45rem;
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: var(--color-text-secondary);
+    word-break: keep-all;
+  }
+
+  .project-facts {
+    display: grid;
+    gap: 0.65rem;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--resume-rule);
+  }
+
+  .project-facts > div {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  .project-facts dt {
+    font-size: 0.72rem;
+    font-weight: 720;
+    line-height: 1.5;
+    color: var(--color-accent);
+  }
+
+  .project-facts dd {
+    min-width: 0;
+  }
+
+  .project-facts dd > strong {
+    font-size: 0.82rem;
+    font-weight: 680;
+    line-height: 1.6;
+    color: var(--color-text-primary);
+    word-break: keep-all;
+  }
+
+  .technology-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+  }
+
+  .technology-list li {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--resume-rule);
+    border-radius: 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 620;
+    line-height: 1.35;
+    color: var(--color-text-secondary);
+  }
+
+  .project-toggle {
+    display: inline-flex;
+    align-self: start;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 5.25rem;
+    height: 2rem;
+    padding-inline: 0.7rem;
+    border: 1px solid var(--resume-rule);
+    border-radius: 999px;
+    font-size: 0.67rem;
+    font-weight: 680;
+    line-height: 1;
+    color: var(--color-text-date);
+    white-space: nowrap;
+  }
+
+  .project-toggle svg {
+    width: 0.72rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 160ms ease;
+  }
+
+  .project-toggle-close {
+    display: none;
+  }
+
+  .project-entry[open] .project-toggle-open {
+    display: none;
+  }
+
+  .project-entry[open] .project-toggle-close {
+    display: inline;
+  }
+
+  .project-entry[open] .project-summary-main h3 {
+    color: var(--color-accent);
+  }
+
+  .project-entry[open] .project-toggle {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  .project-entry[open] .project-toggle svg {
+    transform: rotate(180deg);
+  }
+
+  .project-detail {
+    margin: 0;
+    padding: 1.75rem 2.5rem 2.5rem;
+    border-top: 1px solid var(--resume-rule);
+    opacity: 0;
+    transform: translateY(-0.4rem);
+    transition:
+      opacity 200ms ease 60ms,
+      transform 240ms cubic-bezier(0.22, 1, 0.36, 1) 40ms;
+  }
+
+  .project-entry[open] .project-detail {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .project-role {
-    margin-top: 0.7rem;
-    font-size: 0.76rem;
+    font-size: 0.7rem;
     line-height: 1.55;
     color: var(--color-text-secondary);
     word-break: keep-all;
   }
 
   .project-change {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     overflow: hidden;
     border: 1px solid var(--resume-rule);
     border-radius: 0.7rem;
@@ -522,14 +782,45 @@ const lastUpdated = projects.reduce(
       margin-top: 2.5rem;
     }
 
-    .project-card {
-      border-radius: 1.25rem;
+    .section-title {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0.8rem;
     }
 
-    .project-meta {
+    .section-heading {
+      justify-content: space-between;
+    }
+
+    .project-view-filter {
+      width: 100%;
+    }
+
+    .project-summary {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.9rem;
+      padding: 1.25rem;
+    }
+
+    .project-title-row {
       align-items: flex-start;
       flex-direction: column;
       gap: 0.35rem;
+    }
+
+    .project-title-row time {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .project-toggle {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .project-detail {
+      margin: 0;
+      padding: 1.25rem 1.25rem 1.5rem;
     }
 
     .diff-line {
@@ -552,10 +843,19 @@ const lastUpdated = projects.reduce(
     }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .project-summary,
+    .project-toggle svg,
+    .project-detail,
+    .project-entry::details-content {
+      transition: none;
+    }
+  }
+
   @media print {
     :global(html) {
       color-scheme: light;
-      font-size: 9pt;
+      font-size: 9.5pt;
     }
 
     :global(body),
@@ -592,42 +892,174 @@ const lastUpdated = projects.reduce(
       --diff-add-bg: #dafbe1;
       --diff-add-gutter: #aceebb;
       --diff-add-text: #116329;
-      width: 186mm;
+      width: auto;
       max-width: none;
-      margin: 0 auto;
+      margin: 0;
       padding: 0;
     }
 
     .resume-header {
-      padding-bottom: 6mm;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10mm;
+      padding: 0 0 6mm;
     }
 
     .identity h1 {
-      font-size: 24pt;
+      font-size: 26pt;
+    }
+
+    .contact-list {
+      font-size: 8pt;
+    }
+
+    .print-button {
+      display: none;
     }
 
     .projects-section {
-      margin-top: 8mm;
+      margin-top: 7mm;
+    }
+
+    .section-title {
+      padding: 0 0 3mm;
+    }
+
+    .section-title h2 {
+      font-size: 12pt;
+    }
+
+    .section-meta {
+      font-size: 7pt;
     }
 
     .project-stack {
-      gap: 0;
-      margin-top: 4mm;
+      display: block;
+      margin-top: 8mm;
     }
 
-    .project-card {
-      padding: 9mm;
-      border-radius: 4mm;
+    .project-entry {
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
       box-shadow: none;
       break-inside: auto;
     }
 
-    .project-card + .project-card {
+    .project-entry + .project-entry {
       margin-top: 0;
+      padding-top: 14mm;
       break-before: page;
     }
 
-    .project-header,
+    .project-entry + .project-entry::before {
+      content: '권오승 · Frontend Engineer';
+      display: block;
+      margin-bottom: 8mm;
+      padding-bottom: 3mm;
+      border-bottom: 1px solid var(--resume-rule);
+      font-family: var(--font-mono);
+      font-size: 6.5pt;
+      letter-spacing: 0.06em;
+      color: var(--color-text-date);
+    }
+
+    .project-summary {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+      padding: 4mm 0 5mm;
+      border-top: 2px solid var(--color-text-primary);
+      border-bottom: 1px solid var(--resume-rule);
+    }
+
+    .print-project-index {
+      display: block;
+      margin-bottom: 2.5mm;
+      font-family: var(--font-mono);
+      font-size: 6.5pt;
+      font-weight: 650;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+    }
+
+    .project-title-row {
+      justify-content: space-between;
+      gap: 4mm;
+    }
+
+    .project-summary-main h3 {
+      font-size: 16pt;
+      line-height: 1.25;
+      color: var(--color-text-primary) !important;
+    }
+
+    .project-title-row time {
+      padding: 0;
+      border: 0;
+      font-size: 7.5pt;
+    }
+
+    .project-summary-main > p {
+      margin-top: 2mm;
+      font-size: 9pt;
+      line-height: 1.55;
+    }
+
+    .project-facts {
+      gap: 2.5mm;
+      margin-top: 4mm;
+      padding-top: 4mm;
+    }
+
+    .project-facts > div {
+      grid-template-columns: 12mm minmax(0, 1fr);
+      gap: 3mm;
+    }
+
+    .project-facts dt {
+      font-size: 7.5pt;
+    }
+
+    .project-facts dd > strong {
+      font-size: 8.5pt;
+    }
+
+    .technology-list {
+      gap: 0;
+    }
+
+    .technology-list li {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      font-size: 7.5pt;
+    }
+
+    .technology-list li:not(:last-child)::after {
+      content: '·';
+      margin-inline: 2mm;
+      color: var(--color-text-date);
+    }
+
+    .project-toggle {
+      display: none;
+    }
+
+    .project-detail {
+      display: block !important;
+      margin: 0;
+      padding: 5mm 0 0;
+      border-top: 0;
+      opacity: 1;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .project-role {
+      font-size: 7.5pt;
+    }
+
+    .project-summary,
     .project-change,
     .project-content :global(h2),
     .project-footer {
@@ -635,25 +1067,42 @@ const lastUpdated = projects.reduce(
     }
 
     .project-change {
-      margin-top: 6mm;
+      margin-top: 5mm;
+      border-radius: 1mm;
     }
 
     .project-content {
-      margin-top: 7mm;
+      margin-top: 6mm;
     }
 
     .project-content :global(h2:not(:first-child)) {
-      margin-top: 6mm;
-      padding-top: 6mm;
+      margin-top: 5mm;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .project-content :global(h2:not(:first-child))::before {
+      content: '';
+      display: block;
+      width: 10mm;
+      height: 1px;
+      margin-bottom: 5mm;
+      background: var(--resume-rule);
+    }
+
+    .project-content :global(h2) {
+      font-size: 11pt;
     }
 
     .project-content :global(p) {
-      font-size: 8.4pt;
-      line-height: 1.72;
+      margin-top: 2mm;
+      font-size: 8.7pt;
+      line-height: 1.68;
     }
 
     .project-footer {
-      margin-top: 6mm;
+      margin-top: 5mm;
+      padding-top: 4mm;
     }
 
     .resume-footer {
@@ -662,15 +1111,77 @@ const lastUpdated = projects.reduce(
 
     @page {
       size: A4;
-      margin: 12mm;
+      margin: 14mm 15mm;
     }
   }
 </style>
 
 <script>
+  const projectEntries = Array.from(
+    document.querySelectorAll<HTMLDetailsElement>('.project-entry'),
+  );
+  const projectViewButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('[data-project-view]'),
+  );
+  let projectOpenStates: boolean[] = [];
+
+  const syncProjectView = () => {
+    const allOpen = projectEntries.every((project) => project.open);
+
+    projectViewButtons.forEach((button) => {
+      const isBrief = button.dataset.projectView === 'brief';
+      button.setAttribute(
+        'aria-pressed',
+        String((isBrief && !allOpen) || (!isBrief && allOpen)),
+      );
+    });
+  };
+
+  projectViewButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const shouldOpen = button.dataset.projectView === 'detail';
+      projectEntries.forEach((project) => {
+        project.open = shouldOpen;
+      });
+      syncProjectView();
+    });
+  });
+
+  projectEntries.forEach((project) => {
+    project.addEventListener('toggle', syncProjectView);
+  });
+
+  const openLinkedProject = () => {
+    if (!window.location.hash) return;
+
+    const linkedProject = document.querySelector<HTMLDetailsElement>(
+      window.location.hash,
+    );
+
+    if (linkedProject?.classList.contains('project-entry')) {
+      linkedProject.open = true;
+    }
+  };
+
   document
     .querySelector('[data-print-resume]')
     ?.addEventListener('click', () => {
       window.print();
     });
+
+  window.addEventListener('hashchange', openLinkedProject);
+  window.addEventListener('beforeprint', () => {
+    projectOpenStates = projectEntries.map((project) => project.open);
+    projectEntries.forEach((project) => {
+      project.open = true;
+    });
+  });
+  window.addEventListener('afterprint', () => {
+    projectEntries.forEach((project, index) => {
+      project.open = projectOpenStates[index] ?? false;
+    });
+  });
+
+  openLinkedProject();
+  syncProjectView();
 </script>

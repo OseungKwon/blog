@@ -24,7 +24,9 @@ const career = defineCollection({
     order: z.number().int().nonnegative(),
     startDate: z.string().regex(/^\d{4}-\d{2}$/),
     endDate: z.string().regex(/^\d{4}-\d{2}$/),
+    summary: z.string(),
     roles: z.array(z.string()).min(1),
+    technologies: z.array(z.string()).min(1),
     change: z.object({
       before: z.string(),
       after: z.string(),
