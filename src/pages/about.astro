@@ -1271,28 +1271,18 @@ const projectGroups = indexedProjects
       break-inside: auto;
     }
 
+    .project-entry::details-content {
+      block-size: auto !important;
+      overflow: visible;
+      content-visibility: visible;
+    }
+
     .project-entry + .project-entry {
-      margin-top: 0;
-      padding-top: 14mm;
-      break-before: page;
+      margin-top: 9mm;
     }
 
     .project-year-group:not(:first-child) .project-entry:first-child {
-      padding-top: 14mm;
-      break-before: page;
-    }
-
-    .project-entry + .project-entry::before,
-    .project-year-group:not(:first-child) .project-entry:first-child::before {
-      content: '권오승 · Frontend Engineer';
-      display: block;
-      margin-bottom: 8mm;
-      padding-bottom: 3mm;
-      border-bottom: 1px solid var(--resume-rule);
-      font-family: var(--font-mono);
-      font-size: 6.5pt;
-      letter-spacing: 0.06em;
-      color: var(--color-text-date);
+      margin-top: 9mm;
     }
 
     .project-summary {
@@ -1396,6 +1386,7 @@ const projectGroups = indexedProjects
 
     .project-role {
       font-size: 7.5pt;
+      break-after: avoid-page;
     }
 
     .project-summary,
@@ -1430,12 +1421,15 @@ const projectGroups = indexedProjects
 
     .project-content :global(h2) {
       font-size: 11pt;
+      break-after: avoid-page;
     }
 
     .project-content :global(p) {
       margin-top: 2mm;
       font-size: 8.7pt;
       line-height: 1.68;
+      orphans: 3;
+      widows: 3;
     }
 
     .resume-footer {
