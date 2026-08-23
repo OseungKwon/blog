@@ -58,7 +58,7 @@ const projectGroups = indexedProjects
 
 <Layout
   title="경력기술서 · 권오승"
-  description="프론트엔드 개발자 권오승의 경력기술서. AI 개발 워크플로우와 웹 주문·결제 시스템 구축 경험을 정리했습니다."
+  description="프론트엔드 개발자 권오승의 경력기술서. 패스오더에서 진행한 주문·결제, 디자인 시스템, 성장 실험과 플랫폼 구축 경험을 정리했습니다."
   wide
   profile
 >
@@ -107,7 +107,7 @@ const projectGroups = indexedProjects
       </div>
       <div class="career-focus">
         <dt>주요 영역</dt>
-        <dd>주문·결제 · 프론트엔드 아키텍처 · AI 개발 환경</dd>
+        <dd>주문·결제 · 디자인 시스템 · 성장 실험 · 개발 워크플로우</dd>
       </div>
     </dl>
 
@@ -311,7 +311,7 @@ const projectGroups = indexedProjects
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-accent);
+    color: var(--color-text-date);
   }
 
   .identity h1 {
@@ -409,9 +409,14 @@ const projectGroups = indexedProjects
   }
 
   .project-summary:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: -3px;
-    border-radius: inherit;
+    outline: none;
+  }
+
+  .project-summary:focus-visible .project-toggle {
+    color: var(--color-text-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.28em;
   }
 
   .projects-section {
@@ -464,14 +469,15 @@ const projectGroups = indexedProjects
   .project-expand-all:hover {
     border-color: color-mix(
       in srgb,
-      var(--color-accent) 38%,
+      var(--color-text-primary) 24%,
       var(--resume-rule)
     );
-    color: var(--color-accent);
+    color: var(--color-text-primary);
   }
 
   .project-expand-all:focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid
+      color-mix(in srgb, var(--color-text-primary) 48%, transparent);
     outline-offset: 2px;
   }
 
@@ -527,6 +533,7 @@ const projectGroups = indexedProjects
     overflow: clip;
     border-radius: 1.2rem;
     interpolate-size: allow-keywords;
+    transition: border-color 160ms ease;
   }
 
   .project-entry::details-content {
@@ -549,17 +556,17 @@ const projectGroups = indexedProjects
     padding: 1.75rem 2rem;
     cursor: pointer;
     list-style: none;
-    transition:
-      color 160ms ease,
-      background-color 160ms ease;
+    transition: color 160ms ease;
   }
 
   .project-summary::-webkit-details-marker {
     display: none;
   }
 
-  .project-summary:hover {
-    background: color-mix(in srgb, var(--color-accent) 3%, transparent);
+  @media (hover: hover) {
+    .project-summary:hover .project-toggle {
+      color: var(--color-text-primary);
+    }
   }
 
   .project-title-row {
@@ -651,7 +658,7 @@ const projectGroups = indexedProjects
     font-size: 0.78rem;
     font-weight: 720;
     line-height: 1.5;
-    color: var(--color-accent);
+    color: var(--color-text-date);
   }
 
   .project-facts dd {
@@ -723,12 +730,8 @@ const projectGroups = indexedProjects
     display: inline;
   }
 
-  .project-entry[open] .project-summary-main h4 {
-    color: var(--color-accent);
-  }
-
   .project-entry[open] .project-toggle {
-    color: var(--color-accent);
+    color: var(--color-text-primary);
   }
 
   .project-entry[open] .project-toggle svg {
@@ -984,6 +987,7 @@ const projectGroups = indexedProjects
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .project-entry,
     .project-summary,
     .project-expand-all svg,
     .project-toggle svg,
@@ -1158,7 +1162,7 @@ const projectGroups = indexedProjects
       font-size: 6.5pt;
       font-weight: 650;
       letter-spacing: 0.1em;
-      color: var(--color-accent);
+      color: var(--color-text-date);
     }
 
     .project-title-row {
