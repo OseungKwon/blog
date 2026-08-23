@@ -58,10 +58,11 @@ const projectGroups = indexedProjects
 
 <Layout
   title="경력기술서 · 권오승"
-  description="프론트엔드 개발자 권오승의 경력기술서. 패스오더에서 진행한 주문·결제, 디자인 시스템, 성장 실험과 플랫폼 구축 경험을 정리했습니다."
+  description="프론트엔드 개발자 권오승의 경력기술서. 패스오더에서 진행한 서비스 개발, 백오피스, 개발 플랫폼과 웹 인프라 프로젝트를 정리했습니다."
   wide
   profile
   noBackdrop
+  compactHeader
 >
   <article class="resume-page">
     <header class="resume-header">
@@ -70,16 +71,23 @@ const projectGroups = indexedProjects
         <h1>권오승</h1>
       </div>
 
-      <div class="contact-list">
-        <a href="mailto:00osos@naver.com">00osos@naver.com</a>
+      <div class="contact-list" aria-label="연락처">
+        <a href="mailto:00osos@naver.com">
+          <span class="contact-label">Email</span>
+          <span>00osos@naver.com</span>
+        </a>
         <a
           href="https://github.com/oseungkwon"
           target="_blank"
           rel="noopener noreferrer"
         >
-          github.com/oseungkwon
+          <span class="contact-label">GitHub</span>
+          <span>github.com/oseungkwon</span>
         </a>
-        <a href={BASE}>오승의 기술블로그</a>
+        <a href={BASE}>
+          <span class="contact-label">Blog</span>
+          <span>오승의 기술블로그</span>
+        </a>
       </div>
 
       <button
@@ -145,7 +153,7 @@ const projectGroups = indexedProjects
       </div>
       <div class="career-focus">
         <dt>주요 영역</dt>
-        <dd>주문·결제 · 디자인 시스템 · 성장 실험 · 개발 워크플로우</dd>
+        <dd>주문·결제 · 상품권 · 적립 · 백오피스 · 이벤트</dd>
       </div>
     </dl>
 
@@ -336,8 +344,8 @@ const projectGroups = indexedProjects
 
   .resume-header {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.1rem 2rem;
     align-items: end;
     padding: 0 0.5rem 2rem;
     border-bottom: 1px solid var(--resume-rule);
@@ -361,16 +369,30 @@ const projectGroups = indexedProjects
   }
 
   .contact-list {
-    display: grid;
-    gap: 0.32rem;
-    padding-bottom: 0.15rem;
-    text-align: right;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1.5rem;
+    align-items: center;
   }
 
   .contact-list a {
-    font-size: 0.8rem;
-    line-height: 1.35;
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: baseline;
+    font-size: 0.76rem;
+    line-height: 1.4;
     color: var(--color-text-secondary);
+  }
+
+  .contact-label {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--color-text-date);
+    text-transform: uppercase;
   }
 
   .contact-list a:hover {
@@ -408,6 +430,9 @@ const projectGroups = indexedProjects
   }
 
   .print-button {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
@@ -833,50 +858,54 @@ const projectGroups = indexedProjects
     margin-top: 1.5rem;
     overflow: hidden;
     border: 1px solid var(--resume-rule);
-    border-radius: 0.7rem;
+    border-radius: 0.35rem;
+    background: var(--surface-bg);
   }
 
   .diff-line {
     display: grid;
-    grid-template-columns: 1.8rem 3.8rem minmax(0, 1fr);
+    grid-template-columns: 2rem 4.25rem minmax(0, 1fr);
     align-items: center;
-    min-height: 2.15rem;
+    min-height: 3rem;
+    padding-inline: 0.85rem;
+  }
+
+  .diff-line + .diff-line {
+    border-top: 1px solid var(--resume-rule);
   }
 
   .diff-delete {
-    background: var(--diff-delete-bg);
+    background: transparent;
+    box-shadow: inset 2px 0 var(--diff-delete-text);
   }
 
   .diff-add {
-    background: var(--diff-add-bg);
+    background: transparent;
+    box-shadow: inset 2px 0 var(--diff-add-text);
   }
 
   .diff-sign {
     display: grid;
-    align-self: stretch;
     place-items: center;
     font-family: var(--font-mono);
-    font-size: 0.78rem;
-    font-weight: 650;
+    font-size: 0.8rem;
+    font-weight: 700;
   }
 
   .diff-delete .diff-sign {
-    background: var(--diff-delete-gutter);
     color: var(--diff-delete-text);
   }
 
   .diff-add .diff-sign {
-    background: var(--diff-add-gutter);
     color: var(--diff-add-text);
   }
 
   .diff-line small {
-    padding-left: 0.6rem;
     font-family: var(--font-mono);
-    font-size: 0.55rem;
-    font-weight: 600;
+    font-size: 0.58rem;
+    font-weight: 650;
     line-height: 1.5;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
 
@@ -891,10 +920,10 @@ const projectGroups = indexedProjects
   }
 
   .diff-line strong {
-    padding: 0.38rem 0.75rem 0.38rem 0.3rem;
-    font-size: 0.78rem;
+    padding: 0.65rem 0.5rem 0.65rem 0;
+    font-size: 0.88rem;
     font-weight: 650;
-    line-height: 1.5;
+    line-height: 1.45;
     word-break: keep-all;
   }
 
@@ -961,7 +990,7 @@ const projectGroups = indexedProjects
     .contact-list {
       grid-column: 1 / -1;
       grid-row: 2;
-      text-align: left;
+      gap: 0.5rem 1rem;
     }
 
     .print-button {
@@ -1062,11 +1091,8 @@ const projectGroups = indexedProjects
     }
 
     .diff-line {
-      grid-template-columns: 1.8rem 3.2rem minmax(0, 1fr);
-    }
-
-    .diff-line small {
-      padding-left: 0.55rem;
+      grid-template-columns: 1.75rem 3.75rem minmax(0, 1fr);
+      padding-inline: 0.7rem;
     }
   }
 
@@ -1139,6 +1165,14 @@ const projectGroups = indexedProjects
 
     .contact-list {
       font-size: 8pt;
+    }
+
+    .contact-list a {
+      font-size: 8pt;
+    }
+
+    .contact-label {
+      font-size: 6.5pt;
     }
 
     .print-button {

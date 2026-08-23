@@ -15,6 +15,7 @@ interface Props {
   wide?: boolean;
   profile?: boolean;
   noBackdrop?: boolean;
+  compactHeader?: boolean;
 }
 
 const SITE_NAME = '오승의 기술블로그';
@@ -35,6 +36,7 @@ const {
   wide = false,
   profile = false,
   noBackdrop = false,
+  compactHeader = false,
 } = Astro.props;
 
 const pageTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
@@ -207,7 +209,7 @@ const jsonLd = profile
     class:list={['flex min-h-screen flex-col', { 'no-backdrop': noBackdrop }]}
   >
     <div id="reading-progress"></div>
-    <Header wide={wide} />
+    <Header wide={wide} compact={compactHeader} />
     <main
       class:list={[
         'mx-auto w-full flex-1 px-4 pt-4 pb-6 sm:px-6 lg:px-8',
