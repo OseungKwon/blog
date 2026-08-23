@@ -15,8 +15,10 @@ const isContact = path === `${base}/contact`;
 
 <header
   class:list={[
-    'sticky z-50 mx-auto w-full px-4 sm:px-6 lg:px-8',
-    compact ? 'top-0 max-w-[59rem]' : 'top-3 sm:top-4',
+    'sticky z-50 w-full',
+    compact
+      ? 'border-token-primary bg-token-primary top-0 border-b'
+      : 'mx-auto top-3 px-4 sm:top-4 sm:px-6 lg:px-8',
     !compact && (wide ? 'max-w-6xl' : 'max-w-5xl'),
   ]}
 >
@@ -24,7 +26,7 @@ const isContact = path === `${base}/contact`;
     class:list={[
       'flex items-center justify-between gap-3',
       compact
-        ? 'border-token-primary bg-token-primary border-b py-2.5'
+        ? 'vt-navbar mx-auto max-w-6xl px-4 py-2.5 sm:px-6 lg:px-8'
         : 'surface vt-navbar rounded-full py-2 pr-2 pl-5 sm:pl-6',
     ]}
   >
