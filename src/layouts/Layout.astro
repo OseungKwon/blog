@@ -17,14 +17,14 @@ interface Props {
   noBackdrop?: boolean;
 }
 
-const SITE_NAME = '자몽의 기술블로그';
-const AUTHOR = '자몽';
+const SITE_NAME = '오승의 기술블로그';
+const AUTHOR = '오승';
 // heroImage가 없는 페이지(홈·contact 등)의 소셜 공유 기본 썸네일.
 // public/og-default.png (1200x630 권장)를 두면 자동으로 사용된다.
 const DEFAULT_OG_IMAGE = { src: '/og-default.png', width: 1200, height: 630 };
 const {
   title = SITE_NAME,
-  description = '프론트엔드 개발 경험과 라이브러리 코드 분석을 기록하는 자몽의 기술블로그.',
+  description = '프론트엔드 개발 경험과 라이브러리 코드 분석을 기록하는 오승의 기술블로그.',
   image,
   imageWidth,
   imageHeight,
@@ -219,7 +219,7 @@ const jsonLd = profile
     <footer
       class="border-t border-token-primary bg-token-secondary py-8 text-center text-sm text-token-tertiary"
     >
-      &copy; {new Date().getFullYear()} 자몽의 기술블로그. All rights reserved.
+      &copy; {new Date().getFullYear()} 오승의 기술블로그. All rights reserved.
     </footer>
     <script is:inline>
       // 다크모드 토글 함수

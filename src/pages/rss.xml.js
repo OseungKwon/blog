@@ -1,9 +1,9 @@
 import rss from '@astrojs/rss';
 import { getPublishedPosts } from '../utils/posts';
 
-const SITE_TITLE = '자몽의 기술블로그';
+const SITE_TITLE = '오승의 기술블로그';
 const SITE_DESCRIPTION =
-  '프론트엔드 개발 경험과 라이브러리 코드 분석을 기록하는 자몽의 기술블로그.';
+  '프론트엔드 개발 경험과 라이브러리 코드 분석을 기록하는 오승의 기술블로그.';
 
 export async function GET(context) {
   const posts = (await getPublishedPosts()).sort(
