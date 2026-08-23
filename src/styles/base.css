@@ -50,6 +50,10 @@ body::before {
   background-image: var(--backdrop);
 }
 
+body.no-backdrop::before {
+  display: none;
+}
+
 /* 리스트 기본 스타일 */
 li {
   margin: 0;
