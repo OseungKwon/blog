@@ -96,6 +96,43 @@ const projectGroups = indexedProjects
       </button>
     </header>
 
+    <section
+      class="career-introduction"
+      aria-labelledby="career-introduction-title"
+    >
+      <h2 id="career-introduction-title">
+        PM처럼 프로덕트의 목적을 끝까지 파고들고,<br />
+        디자이너처럼 작은 차이를 놓치지 않는 프론트엔드 개발자 권오승입니다.
+      </h2>
+
+      <div class="career-introduction-copy">
+        <p>
+          기획서를 받으면 구현할 기능만 확인하기보다 사용자가 어떤 흐름을 지나게
+          될지 먼저 생각합니다. 개선할 부분이 보이면 의견을 내고, 디자인 시안은
+          디자이너와 대화하며 그 안에 담긴 의도와 맥락을 이해한 뒤 구현합니다.
+        </p>
+        <p>
+          제품을 처음부터 끝까지 함께 만들면서, 당장의 기능뿐 아니라 이후의
+          변화에 유연하게 대응할 수 있는 구조까지 고민하게 되었습니다. 기획이나
+          디자인이 달라질 때마다 코드 여러 곳을 수정하는 일을 줄이고 싶어 함수형
+          프로그래밍과 클린 아키텍처, FSD를 공부했습니다. 이후 도메인 규칙을
+          UI에서 분리하는 구조를 제안해 실제 코드에 반영했고, 현재는 전사 웹
+          프로젝트에서 사용하고 있습니다.
+        </p>
+        <p>
+          경험이 쌓이면서 제가 작성하는 코드뿐 아니라 팀이 일하는 방식에도 눈이
+          갔습니다. 디자인 시스템과 선언형 트래킹 라이브러리를 만들고, n8n과 AI
+          워크플로우를 활용해 반복되던 업무를 자동화했습니다.
+        </p>
+        <p>
+          그동안 웹 주문과 결제, 사장님 페이지, 디자인 시스템 등 회사의 주요
+          프로젝트를 맡아왔습니다. 최근에는 Next.js 기반 서비스 개발과 함께
+          모니터링 시스템 구축, 배포 자동화, 웹 서버 운영 등 인프라 업무까지
+          담당하고 있습니다.
+        </p>
+      </div>
+    </section>
+
     <dl class="career-overview" aria-label="경력 요약">
       <div>
         <dt>회사</dt>
@@ -337,6 +374,36 @@ const projectGroups = indexedProjects
 
   .contact-list a:hover {
     color: var(--color-accent);
+  }
+
+  .career-introduction {
+    margin: 1.5rem 0.5rem 0;
+  }
+
+  .career-introduction h2 {
+    max-width: 47rem;
+    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    font-weight: 650;
+    line-height: 1.5;
+    letter-spacing: -0.035em;
+    color: var(--color-text-primary);
+    word-break: keep-all;
+  }
+
+  .career-introduction-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.9rem;
+    max-width: 52rem;
+    margin-top: 1rem;
+  }
+
+  .career-introduction-copy p {
+    font-size: 0.94rem;
+    font-weight: 450;
+    line-height: 1.8;
+    color: var(--color-text-primary);
+    word-break: keep-all;
   }
 
   .print-button {
@@ -851,14 +918,15 @@ const projectGroups = indexedProjects
 
   .project-content :global(p) {
     margin-top: 0.85rem;
-    font-size: 0.9rem;
-    line-height: 1.75;
-    color: var(--color-text-secondary);
+    font-size: 0.94rem;
+    font-weight: 450;
+    line-height: 1.8;
+    color: var(--color-text-primary);
     word-break: keep-all;
   }
 
   .project-content :global(p + p) {
-    margin-top: 0.75rem;
+    margin-top: 0.9rem;
   }
 
   .project-content :global(strong) {
@@ -904,6 +972,21 @@ const projectGroups = indexedProjects
       grid-template-columns: 1fr 1.45fr;
       margin-inline: 0;
       padding-block: 0.9rem;
+    }
+
+    .career-introduction {
+      margin: 1.25rem 0 0;
+    }
+
+    .career-introduction h2 {
+      font-size: 1.16rem;
+      line-height: 1.55;
+    }
+
+    .career-introduction-copy {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin-top: 0.85rem;
     }
 
     .career-overview > div {
@@ -1065,6 +1148,26 @@ const projectGroups = indexedProjects
       grid-template-columns: 0.7fr 1.15fr 2fr;
       margin: 3mm 0 0;
       padding: 3.5mm 0;
+    }
+
+    .career-introduction {
+      margin: 4mm 0 0;
+    }
+
+    .career-introduction h2 {
+      max-width: 155mm;
+      font-size: 12pt;
+      line-height: 1.55;
+    }
+
+    .career-introduction-copy {
+      gap: 2.5mm;
+      margin-top: 3mm;
+    }
+
+    .career-introduction-copy p {
+      font-size: 8pt;
+      line-height: 1.6;
     }
 
     .career-overview > div {
