@@ -1,40 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ResumeMetaRow from '../components/ResumeMetaRow.astro';
+import { getResume } from '../features/resume/resume';
 
 const BASE = import.meta.env.BASE_URL;
 const formatMonth = (date: string) => date.replace('-', '.');
-const projects = await Promise.all(
-  (await getCollection('career'))
-    .sort((a, b) => b.data.endDate.localeCompare(a.data.endDate) || a.data.order - b.data.order)
-    .map(async (project) => ({
-      ...project,
-      Content: (await project.render()).Content,
-    })),
-);
-const projectYears = [...new Set(projects.flatMap(({ data }) => [data.startDate.slice(0, 4), data.endDate.slice(0, 4)]))].sort();
-const projectYearsLabel = projectYears.length > 1 ? `${projectYears[0]}—${projectYears.at(-1)}` : (projectYears[0] ?? '');
-const lastUpdated = projects.reduce((latest, { data }) => (data.endDate > latest ? data.endDate : latest), '');
-const indexedProjects = projects.map((project, projectIndex) => ({
-  ...project,
-  projectIndex,
-}));
-type IndexedProject = (typeof indexedProjects)[number];
-const projectGroups = indexedProjects
-  .reduce<Array<{ year: string; projects: IndexedProject[] }>>((groups, project) => {
-    const year = project.data.endDate.slice(0, 4);
-    const group = groups.find((item) => item.year === year);
-
-    if (group) {
-      group.projects.push(project);
-    } else {
-      groups.push({ year, projects: [project] });
-    }
-
-    return groups;
-  }, [])
-  .sort((a, b) => b.year.localeCompare(a.year));
+const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await getResume();
 ---
 
 <Layout
@@ -128,7 +99,7 @@ const projectGroups = indexedProjects
         <div class="section-heading">
           <h2 id="projects-title">패스오더 주요 프로젝트</h2>
           <span class="section-meta">
-            {projects.length}개 · {projectYearsLabel}
+            {projectCount}개 · {projectYearsLabel}
           </span>
         </div>
 
@@ -211,7 +182,9 @@ const projectGroups = indexedProjects
 
                     <article class="project-detail">
                       <dl class="project-role">
-                        <ResumeMetaRow label="핵심 업무" variant="role">{data.roles.join(' · ')}</ResumeMetaRow>
+                        <ResumeMetaRow label="핵심 업무" variant="role">
+                          {data.roles.join(' · ')}
+                        </ResumeMetaRow>
                       </dl>
 
                       <section class="project-change" aria-label="프로젝트 변화 요약">
