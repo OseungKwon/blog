@@ -6,53 +6,33 @@ const BASE = import.meta.env.BASE_URL;
 const formatMonth = (date: string) => date.replace('-', '.');
 const projects = await Promise.all(
   (await getCollection('career'))
-    .sort(
-      (a, b) =>
-        b.data.endDate.localeCompare(a.data.endDate) ||
-        a.data.order - b.data.order,
-    )
+    .sort((a, b) => b.data.endDate.localeCompare(a.data.endDate) || a.data.order - b.data.order)
     .map(async (project) => ({
       ...project,
       Content: (await project.render()).Content,
     })),
 );
-const projectYears = [
-  ...new Set(
-    projects.flatMap(({ data }) => [
-      data.startDate.slice(0, 4),
-      data.endDate.slice(0, 4),
-    ]),
-  ),
-].sort();
-const projectYearsLabel =
-  projectYears.length > 1
-    ? `${projectYears[0]}—${projectYears.at(-1)}`
-    : (projectYears[0] ?? '');
-const lastUpdated = projects.reduce(
-  (latest, { data }) => (data.endDate > latest ? data.endDate : latest),
-  '',
-);
+const projectYears = [...new Set(projects.flatMap(({ data }) => [data.startDate.slice(0, 4), data.endDate.slice(0, 4)]))].sort();
+const projectYearsLabel = projectYears.length > 1 ? `${projectYears[0]}—${projectYears.at(-1)}` : (projectYears[0] ?? '');
+const lastUpdated = projects.reduce((latest, { data }) => (data.endDate > latest ? data.endDate : latest), '');
 const indexedProjects = projects.map((project, projectIndex) => ({
   ...project,
   projectIndex,
 }));
 type IndexedProject = (typeof indexedProjects)[number];
 const projectGroups = indexedProjects
-  .reduce<Array<{ year: string; projects: IndexedProject[] }>>(
-    (groups, project) => {
-      const year = project.data.endDate.slice(0, 4);
-      const group = groups.find((item) => item.year === year);
+  .reduce<Array<{ year: string; projects: IndexedProject[] }>>((groups, project) => {
+    const year = project.data.endDate.slice(0, 4);
+    const group = groups.find((item) => item.year === year);
 
-      if (group) {
-        group.projects.push(project);
-      } else {
-        groups.push({ year, projects: [project] });
-      }
+    if (group) {
+      group.projects.push(project);
+    } else {
+      groups.push({ year, projects: [project] });
+    }
 
-      return groups;
-    },
-    [],
-  )
+    return groups;
+  }, [])
   .sort((a, b) => b.year.localeCompare(a.year));
 ---
 
@@ -76,11 +56,7 @@ const projectGroups = indexedProjects
           <span class="contact-label">Email</span>
           <span>00osos@naver.com</span>
         </a>
-        <a
-          href="https://github.com/oseungkwon"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <a href="https://github.com/oseungkwon" target="_blank" rel="noopener noreferrer">
           <span class="contact-label">GitHub</span>
           <span>github.com/oseungkwon</span>
         </a>
@@ -90,25 +66,15 @@ const projectGroups = indexedProjects
         </a>
       </div>
 
-      <button
-        class="print-button press"
-        type="button"
-        data-print-resume
-        data-print-hidden
-      >
+      <button class="print-button press" type="button" data-print-resume data-print-hidden>
         <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"
-          ></path>
+          <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"></path>
         </svg>
         PDF로 저장
       </button>
     </header>
 
-    <section
-      class="career-introduction"
-      aria-labelledby="career-introduction-title"
-    >
+    <section class="career-introduction" aria-labelledby="career-introduction-title">
       <h2 id="career-introduction-title">
         PM처럼 제품의 목적을 끝까지 파고들고,<br />
         디자이너처럼 작은 차이를 놓치지 않는 프론트엔드 개발자 권오승입니다.
@@ -116,34 +82,27 @@ const projectGroups = indexedProjects
 
       <div class="career-introduction-copy">
         <p>
-          기획서를 받으면 구현할 기능부터 확인하기보다, <strong
-            >사용자가 어떤 흐름을 거쳐 이 기능을 이용하게 될지</strong
-          > 먼저 살펴봅니다. 사용 과정에서 불편할 만한 부분이 보이면 개선안을 제안하고,
-          디자이너와 대화하며 화면에 담긴 의도와 맥락까지 이해한 뒤 구현합니다.
+          기획서를 받으면 구현할 기능부터 확인하기보다,
+          <strong>사용자가 어떤 흐름을 거쳐 이 기능을 이용하게 될지</strong>
+          먼저 살펴봅니다. 사용자 흐름 속에서 개선할 만한 부분이 보이면 개선안을 제안하고, 디자이너와 소통하며 화면에 담긴 의도와 맥락까지 이해한 뒤 설계에 들어갑니다.
         </p>
         <p>
-          프로젝트의 전 과정에 참여하다 보니 <strong
-            >요구사항은 계속 달라질 수밖에 없다는 점</strong
-          >도 배웠습니다. 기획이나 디자인이 바뀔 때마다 코드 곳곳을 수정하는
-          문제를 줄이기 위해 함수형 프로그래밍과 클린 아키텍처, FSD를
-          공부했습니다. 이를 반영한 구조를 팀에 제안해 실제 프로젝트에 적용했고,
-          현재는 전사 웹 프로젝트의 공통 개발 방식으로 사용하고 있습니다.
+          프로젝트의 전 과정에 참여하면서 요구사항은 언제든 달라질 수 있다는 점을 경험했고, <strong>변화에 유연하게 대응할 수 있는 개발 구조</strong>가 필요하다고 느꼈습니다. 기획이나 디자인이 바뀔
+          때마다 코드 곳곳을 수정하는 문제를 줄이기 위해 <strong>함수형 프로그래밍과 클린 아키텍처, FSD</strong>를 공부했습니다. 이를 반영한 구조를 팀에 제안해 실제 프로젝트에 적용했고, 현재는 전사 웹
+          프로젝트의 공통 개발 방식으로 사용하고 있습니다.
         </p>
         <p>
-          경험이 쌓이면서 제가 작성하는 코드뿐 아니라 <strong
-            >팀이 반복해서 겪는 불편</strong
-          >에도 관심을 갖게 됐습니다. 프로젝트마다 다시 만들던 UI를 디자인
-          시스템으로 정리하고, 화면 곳곳에 흩어져 있던 이벤트 로직은 선언형
-          트래킹 라이브러리로 통합했습니다. 최근에는 n8n과 AI 워크플로우를
-          활용해 반복 업무를 자동화하고 있습니다.
+          경험이 쌓이면서 제가 작성하는 코드뿐 아니라
+          <strong>팀이 반복해서 겪는 불편</strong>에도 관심을 갖게 됐습니다. 프로젝트마다 다시 만들던 UI를 <strong>디자인 시스템</strong>으로 정리하고, 화면 곳곳에 흩어져 있던 이벤트 로직은 <strong
+            >선언형 트래킹 라이브러리</strong
+          >로 통합했습니다. 최근에는 n8n을 사용해 업무를 자동화하고, 프로젝트에서 정한 개발 방식과 품질 기준을 따르도록 <strong>AI 워크플로우</strong>를 구축해 작업 시간과 시행착오를 줄였습니다.
         </p>
         <p>
-          "저는 그동안 <strong
-            >웹 주문과 결제, 상품권, 적립, 사장님 페이지, 디자인 시스템 등
-            회사의 주요 프로젝트</strong
-          >를 맡아 진행했습니다. 현재는 Next.js 기반 서비스 개발을 중심으로 <strong
-            >모니터링 시스템 구축과 배포 자동화, 웹 서버 운영</strong
-          >까지 담당하며 제품의 개발부터 운영까지 함께하고 있습니다."
+          "저는 그동안
+          <strong>웹 주문과 결제, 상품권, 적립, 사장님 페이지, 디자인 시스템 등 회사의 주요 프로젝트</strong>
+          를 맡아 진행했습니다. 현재는 Next.js 기반 서비스 개발을 중심으로 업무를 진행하고 있으며,
+          <strong>모니터링 시스템 구축과 CI/CD 최적화, 웹 서버 운영</strong>
+          까지 담당하며 제품의 개발부터 운영까지 함께하고 있습니다."
         </p>
       </div>
     </section>
@@ -172,14 +131,7 @@ const projectGroups = indexedProjects
           </span>
         </div>
 
-        <button
-          class="project-expand-all"
-          type="button"
-          aria-controls="project-list"
-          aria-expanded="false"
-          data-project-expand-all
-          data-print-hidden
-        >
+        <button class="project-expand-all" type="button" aria-controls="project-list" aria-expanded="false" data-project-expand-all data-print-hidden>
           <span data-project-expand-label>전체 펼치기</span>
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <path d="m4 6 4 4 4-4"></path>
@@ -190,10 +142,7 @@ const projectGroups = indexedProjects
       <div class="project-year-list" id="project-list">
         {
           projectGroups.map(({ year, projects: yearProjects }) => (
-            <section
-              class="project-year-group"
-              aria-labelledby={`project-year-${year}`}
-            >
+            <section class="project-year-group" aria-labelledby={`project-year-${year}`}>
               <header class="project-year-heading">
                 <h3 id={`project-year-${year}`}>{year}</h3>
                 <span>{yearProjects.length}개 프로젝트</span>
@@ -210,39 +159,24 @@ const projectGroups = indexedProjects
                         <div class="project-title-row">
                           <h4>{data.title}</h4>
                           <time datetime={`${data.startDate}/${data.endDate}`}>
-                            {formatMonth(data.startDate)} —{' '}
-                            {formatMonth(data.endDate)}
+                            {formatMonth(data.startDate)} — {formatMonth(data.endDate)}
                           </time>
                         </div>
                         <div class="project-summary-lead">
                           <p>{data.summary}</p>
                           {data.links.length > 0 && (
-                            <ul
-                              class="project-proof-list"
-                              aria-label="프로젝트 링크"
-                            >
+                            <ul class="project-proof-list" aria-label="프로젝트 링크">
                               {data.links.map((link) => (
                                 <li>
                                   <a
                                     class="project-proof-link"
-                                    href={
-                                      link.external
-                                        ? link.href
-                                        : `${BASE}${link.href}`
-                                    }
-                                    target={
-                                      link.external ? '_blank' : undefined
-                                    }
-                                    rel={
-                                      link.external
-                                        ? 'noopener noreferrer'
-                                        : undefined
-                                    }
+                                    href={link.external ? link.href : `${BASE}${link.href}`}
+                                    target={link.external ? '_blank' : undefined}
+                                    rel={link.external ? 'noopener noreferrer' : undefined}
                                     aria-label={`${link.type}: ${link.label}`}
                                     title={link.label}
                                   >
-                                    {link.type}{' '}
-                                    <span aria-hidden="true">↗</span>
+                                    {link.type} <span aria-hidden="true">↗</span>
                                   </a>
                                 </li>
                               ))}
@@ -259,10 +193,7 @@ const projectGroups = indexedProjects
                           <div>
                             <dt>기술</dt>
                             <dd>
-                              <ul
-                                class="technology-list"
-                                aria-label="사용 기술"
-                              >
+                              <ul class="technology-list" aria-label="사용 기술">
                                 {data.technologies.map((technology) => (
                                   <li>{technology}</li>
                                 ))}
@@ -282,12 +213,12 @@ const projectGroups = indexedProjects
                     </summary>
 
                     <article class="project-detail">
-                      <p class="project-role">{data.roles.join(' · ')}</p>
+                      <p class="project-role">
+                        <span class="project-role-label">담당 범위</span>
+                        <span>{data.roles.join(' · ')}</span>
+                      </p>
 
-                      <section
-                        class="project-change"
-                        aria-label="프로젝트 변화 요약"
-                      >
+                      <section class="project-change" aria-label="프로젝트 변화 요약">
                         <div class="diff-line diff-delete">
                           <span class="diff-sign" aria-hidden="true">
                             −
@@ -387,14 +318,14 @@ const projectGroups = indexedProjects
     display: inline-flex;
     gap: 0.45rem;
     align-items: baseline;
-    font-size: 0.76rem;
+    font-size: 0.875rem;
     line-height: 1.4;
     color: var(--color-text-secondary);
   }
 
   .contact-label {
     font-family: var(--font-mono);
-    font-size: 0.62rem;
+    font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.06em;
     color: var(--color-text-date);
@@ -411,7 +342,7 @@ const projectGroups = indexedProjects
 
   .career-introduction h2 {
     max-width: 47rem;
-    font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+    font-size: clamp(1.35rem, 2.4vw, 1.625rem);
     font-weight: 650;
     line-height: 1.5;
     letter-spacing: -0.035em;
@@ -428,7 +359,7 @@ const projectGroups = indexedProjects
   }
 
   .career-introduction-copy p {
-    font-size: 0.94rem;
+    font-size: 1.0625rem;
     font-weight: 450;
     line-height: 1.8;
     color: var(--color-text-primary);
@@ -496,7 +427,7 @@ const projectGroups = indexedProjects
 
   .career-overview dt {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 600;
     letter-spacing: 0.06em;
     color: var(--color-text-date);
@@ -504,7 +435,7 @@ const projectGroups = indexedProjects
 
   .career-overview dd {
     margin-top: 0.35rem;
-    font-size: 0.86rem;
+    font-size: 0.9375rem;
     font-weight: 650;
     line-height: 1.5;
     color: var(--color-text-primary);
@@ -541,7 +472,7 @@ const projectGroups = indexedProjects
   }
 
   .section-title h2 {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 720;
     letter-spacing: -0.015em;
   }
@@ -570,17 +501,12 @@ const projectGroups = indexedProjects
   }
 
   .project-expand-all:hover {
-    border-color: color-mix(
-      in srgb,
-      var(--color-text-primary) 24%,
-      var(--resume-rule)
-    );
+    border-color: color-mix(in srgb, var(--color-text-primary) 24%, var(--resume-rule));
     color: var(--color-text-primary);
   }
 
   .project-expand-all:focus-visible {
-    outline: 2px solid
-      color-mix(in srgb, var(--color-text-primary) 48%, transparent);
+    outline: 2px solid color-mix(in srgb, var(--color-text-primary) 48%, transparent);
     outline-offset: 2px;
   }
 
@@ -615,7 +541,7 @@ const projectGroups = indexedProjects
 
   .project-year-heading h3 {
     font-family: var(--font-mono);
-    font-size: 0.88rem;
+    font-size: 0.9375rem;
     font-weight: 650;
     letter-spacing: 0.04em;
     color: var(--color-text-primary);
@@ -692,7 +618,7 @@ const projectGroups = indexedProjects
   }
 
   .project-summary-main h4 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 720;
     line-height: 1.35;
     letter-spacing: -0.025em;
@@ -712,7 +638,7 @@ const projectGroups = indexedProjects
   }
 
   .project-summary-lead > p {
-    font-size: 0.88rem;
+    font-size: 1rem;
     line-height: 1.65;
     color: var(--color-text-secondary);
     word-break: keep-all;
@@ -758,7 +684,7 @@ const projectGroups = indexedProjects
   }
 
   .project-facts dt {
-    font-size: 0.78rem;
+    font-size: 0.8125rem;
     font-weight: 720;
     line-height: 1.5;
     color: var(--color-text-date);
@@ -769,7 +695,7 @@ const projectGroups = indexedProjects
   }
 
   .project-facts dd > strong {
-    font-size: 0.88rem;
+    font-size: 0.9375rem;
     font-weight: 680;
     line-height: 1.6;
     color: var(--color-text-primary);
@@ -858,10 +784,22 @@ const projectGroups = indexedProjects
   }
 
   .project-role {
-    font-size: 0.76rem;
+    display: grid;
+    grid-template-columns: 4.25rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: baseline;
+    font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--color-text-secondary);
     word-break: keep-all;
+  }
+
+  .project-role-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--color-text-date);
   }
 
   .project-change {
@@ -931,7 +869,7 @@ const projectGroups = indexedProjects
 
   .diff-line strong {
     padding: 0.65rem 0.5rem 0.65rem 0;
-    font-size: 0.88rem;
+    font-size: 0.9375rem;
     font-weight: 650;
     line-height: 1.45;
     word-break: keep-all;
@@ -948,7 +886,7 @@ const projectGroups = indexedProjects
   }
 
   .project-content :global(h2) {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 700;
     line-height: 1.45;
     letter-spacing: -0.02em;
@@ -958,7 +896,7 @@ const projectGroups = indexedProjects
 
   .project-content :global(p) {
     margin-top: 0.85rem;
-    font-size: 0.94rem;
+    font-size: 1.0625rem;
     font-weight: 450;
     line-height: 1.8;
     color: var(--color-text-primary);
@@ -1019,7 +957,7 @@ const projectGroups = indexedProjects
     }
 
     .career-introduction h2 {
-      font-size: 1.16rem;
+      font-size: 1.25rem;
       line-height: 1.55;
     }
 
@@ -1385,8 +1323,14 @@ const projectGroups = indexedProjects
     }
 
     .project-role {
+      grid-template-columns: 13mm minmax(0, 1fr);
+      gap: 2mm;
       font-size: 7.5pt;
       break-after: avoid-page;
+    }
+
+    .project-role-label {
+      font-size: 6.5pt;
     }
 
     .project-summary,
@@ -1444,21 +1388,13 @@ const projectGroups = indexedProjects
 </style>
 
 <script>
-  const projectEntries = Array.from(
-    document.querySelectorAll<HTMLDetailsElement>('.project-entry'),
-  );
-  const projectExpandAll = document.querySelector<HTMLButtonElement>(
-    '[data-project-expand-all]',
-  );
-  const projectExpandLabel = document.querySelector<HTMLElement>(
-    '[data-project-expand-label]',
-  );
+  const projectEntries = Array.from(document.querySelectorAll<HTMLDetailsElement>('.project-entry'));
+  const projectExpandAll = document.querySelector<HTMLButtonElement>('[data-project-expand-all]');
+  const projectExpandLabel = document.querySelector<HTMLElement>('[data-project-expand-label]');
   let projectOpenStates: boolean[] = [];
 
   const syncProjectExpandAll = () => {
-    const allOpen =
-      projectEntries.length > 0 &&
-      projectEntries.every((project) => project.open);
+    const allOpen = projectEntries.length > 0 && projectEntries.every((project) => project.open);
 
     projectExpandAll?.setAttribute('aria-expanded', String(allOpen));
     if (projectExpandLabel) {
@@ -1478,31 +1414,25 @@ const projectGroups = indexedProjects
     project.addEventListener('toggle', syncProjectExpandAll);
   });
 
-  document
-    .querySelectorAll<HTMLAnchorElement>('.project-proof-link')
-    .forEach((link) => {
-      link.addEventListener('click', (event) => {
-        event.stopPropagation();
-      });
+  document.querySelectorAll<HTMLAnchorElement>('.project-proof-link').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.stopPropagation();
     });
+  });
 
   const openLinkedProject = () => {
     if (!window.location.hash) return;
 
-    const linkedProject = document.querySelector<HTMLDetailsElement>(
-      window.location.hash,
-    );
+    const linkedProject = document.querySelector<HTMLDetailsElement>(window.location.hash);
 
     if (linkedProject?.classList.contains('project-entry')) {
       linkedProject.open = true;
     }
   };
 
-  document
-    .querySelector('[data-print-resume]')
-    ?.addEventListener('click', () => {
-      window.print();
-    });
+  document.querySelector('[data-print-resume]')?.addEventListener('click', () => {
+    window.print();
+  });
 
   window.addEventListener('hashchange', openLinkedProject);
   window.addEventListener('beforeprint', () => {
