@@ -1,0 +1,60 @@
+---
+interface Props {
+  label: string;
+  variant?: 'fact' | 'role';
+}
+
+const { label, variant = 'fact' } = Astro.props;
+---
+
+<div class:list={['resume-meta-row', `resume-meta-row--${variant}`]}>
+  <dt>{label}</dt>
+  <dd><slot /></dd>
+</div>
+
+<style>
+  .resume-meta-row {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  dt {
+    font-size: 0.8125rem;
+    font-weight: 720;
+    line-height: 1.5;
+    color: var(--color-text-date);
+    white-space: nowrap;
+  }
+
+  dd {
+    min-width: 0;
+  }
+
+  .resume-meta-row--role dd {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+    word-break: keep-all;
+  }
+
+  @media print {
+    .resume-meta-row {
+      grid-template-columns: 12mm minmax(0, 1fr);
+      gap: 3mm;
+    }
+
+    dt {
+      font-size: 7.5pt;
+    }
+
+    .resume-meta-row--role {
+      break-after: avoid-page;
+    }
+
+    .resume-meta-row--role dd {
+      font-size: 7.5pt;
+    }
+  }
+</style>

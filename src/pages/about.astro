@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import ResumeMetaRow from '../components/ResumeMetaRow.astro';
 
 const BASE = import.meta.env.BASE_URL;
 const formatMonth = (date: string) => date.replace('-', '.');
@@ -156,11 +157,21 @@ const projectGroups = indexedProjects
                         <span class="print-project-index" aria-hidden="true">
                           프로젝트 {String(projectIndex + 1).padStart(2, '0')}
                         </span>
-                        <div class="project-title-row">
-                          <h4>{data.title}</h4>
-                          <time datetime={`${data.startDate}/${data.endDate}`}>
-                            {formatMonth(data.startDate)} — {formatMonth(data.endDate)}
-                          </time>
+                        <div class="project-summary-header">
+                          <div class="project-title-row">
+                            <h4>{data.title}</h4>
+                            <time datetime={`${data.startDate}/${data.endDate}`}>
+                              {formatMonth(data.startDate)} — {formatMonth(data.endDate)}
+                            </time>
+                          </div>
+
+                          <span class="project-toggle" aria-hidden="true">
+                            <span class="project-toggle-open">펼치기</span>
+                            <span class="project-toggle-close">접기</span>
+                            <svg viewBox="0 0 16 16">
+                              <path d="m4 6 4 4 4-4" />
+                            </svg>
+                          </span>
                         </div>
                         <div class="project-summary-lead">
                           <p>{data.summary}</p>
@@ -184,39 +195,24 @@ const projectGroups = indexedProjects
                           )}
                         </div>
                         <dl class="project-facts">
-                          <div>
-                            <dt>성과</dt>
-                            <dd>
-                              <strong>{data.change.impact}</strong>
-                            </dd>
-                          </div>
-                          <div>
-                            <dt>기술</dt>
-                            <dd>
-                              <ul class="technology-list" aria-label="사용 기술">
-                                {data.technologies.map((technology) => (
-                                  <li>{technology}</li>
-                                ))}
-                              </ul>
-                            </dd>
-                          </div>
+                          <ResumeMetaRow label="성과">
+                            <strong>{data.change.impact}</strong>
+                          </ResumeMetaRow>
+                          <ResumeMetaRow label="기술">
+                            <ul class="technology-list" aria-label="사용 기술">
+                              {data.technologies.map((technology) => (
+                                <li>{technology}</li>
+                              ))}
+                            </ul>
+                          </ResumeMetaRow>
                         </dl>
                       </div>
-
-                      <span class="project-toggle" aria-hidden="true">
-                        <span class="project-toggle-open">펼치기</span>
-                        <span class="project-toggle-close">접기</span>
-                        <svg viewBox="0 0 16 16">
-                          <path d="m4 6 4 4 4-4" />
-                        </svg>
-                      </span>
                     </summary>
 
                     <article class="project-detail">
-                      <p class="project-role">
-                        <span class="project-role-label">담당 범위</span>
-                        <span>{data.roles.join(' · ')}</span>
-                      </p>
+                      <dl class="project-role">
+                        <ResumeMetaRow label="핵심 업무" variant="role">{data.roles.join(' · ')}</ResumeMetaRow>
+                      </dl>
 
                       <section class="project-change" aria-label="프로젝트 변화 요약">
                         <div class="diff-line diff-delete">
@@ -578,10 +574,7 @@ const projectGroups = indexedProjects
   }
 
   .project-summary {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 1.5rem;
-    align-items: start;
+    display: block;
     padding: 1.75rem 2rem;
     cursor: pointer;
     list-style: none;
@@ -596,6 +589,13 @@ const projectGroups = indexedProjects
     .project-summary:hover .project-toggle {
       color: var(--color-text-primary);
     }
+  }
+
+  .project-summary-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: start;
   }
 
   .project-title-row {
@@ -676,27 +676,9 @@ const projectGroups = indexedProjects
     border-top: 1px dashed var(--resume-rule);
   }
 
-  .project-facts > div {
-    display: grid;
-    grid-template-columns: 2.75rem minmax(0, 1fr);
-    gap: 0.75rem;
-    align-items: baseline;
-  }
-
-  .project-facts dt {
-    font-size: 0.8125rem;
-    font-weight: 720;
-    line-height: 1.5;
-    color: var(--color-text-date);
-  }
-
-  .project-facts dd {
-    min-width: 0;
-  }
-
-  .project-facts dd > strong {
+  .project-facts :global(dd > strong) {
     font-size: 0.9375rem;
-    font-weight: 680;
+    font-weight: 620;
     line-height: 1.6;
     color: var(--color-text-primary);
     word-break: keep-all;
@@ -784,22 +766,7 @@ const projectGroups = indexedProjects
   }
 
   .project-role {
-    display: grid;
-    grid-template-columns: 4.25rem minmax(0, 1fr);
-    gap: 0.75rem;
-    align-items: baseline;
-    font-size: 0.9375rem;
-    line-height: 1.55;
-    color: var(--color-text-secondary);
-    word-break: keep-all;
-  }
-
-  .project-role-label {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 650;
-    letter-spacing: 0.04em;
-    color: var(--color-text-date);
+    margin: 0;
   }
 
   .project-change {
@@ -886,7 +853,7 @@ const projectGroups = indexedProjects
   }
 
   .project-content :global(h2) {
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 700;
     line-height: 1.45;
     letter-spacing: -0.02em;
@@ -1006,9 +973,11 @@ const projectGroups = indexedProjects
     }
 
     .project-summary {
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 0.9rem;
       padding: 1.25rem;
+    }
+
+    .project-summary-header {
+      gap: 0.9rem;
     }
 
     .project-title-row {
@@ -1026,11 +995,6 @@ const projectGroups = indexedProjects
       align-items: flex-start;
       flex-direction: column;
       gap: 0.35rem;
-    }
-
-    .project-toggle {
-      grid-column: 2;
-      grid-row: 1;
     }
 
     .project-detail {
@@ -1278,16 +1242,7 @@ const projectGroups = indexedProjects
       padding-top: 4mm;
     }
 
-    .project-facts > div {
-      grid-template-columns: 12mm minmax(0, 1fr);
-      gap: 3mm;
-    }
-
-    .project-facts dt {
-      font-size: 7.5pt;
-    }
-
-    .project-facts dd > strong {
+    .project-facts :global(dd > strong) {
       font-size: 8.5pt;
     }
 
@@ -1320,17 +1275,6 @@ const projectGroups = indexedProjects
       opacity: 1;
       transform: none;
       box-shadow: none;
-    }
-
-    .project-role {
-      grid-template-columns: 13mm minmax(0, 1fr);
-      gap: 2mm;
-      font-size: 7.5pt;
-      break-after: avoid-page;
-    }
-
-    .project-role-label {
-      font-size: 6.5pt;
     }
 
     .project-summary,
