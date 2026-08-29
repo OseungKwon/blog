@@ -1,0 +1,19 @@
+<button
+  type="button"
+  data-post-back
+  class="press inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold text-token-nav transition-colors hover:bg-token-hover hover:text-token-primary"
+>
+  ← 목록으로
+</button>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-post-back]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (history.length > 1 && document.referrer.startsWith(location.origin)) {
+        history.back();
+      } else {
+        location.href = import.meta.env.BASE_URL;
+      }
+    });
+  });
+</script>

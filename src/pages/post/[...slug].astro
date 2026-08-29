@@ -1,8 +1,6 @@
 ---
-import { type CollectionEntry } from 'astro:content';
-import { Image } from 'astro:assets';
-import Layout from '../../layouts/Layout.astro';
-import TableOfContents from '../../components/TableOfContents.astro';
+import type { CollectionEntry } from 'astro:content';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 import { getPublishedPosts } from '../../utils/posts';
 
 export async function getStaticPaths() {
@@ -12,107 +10,13 @@ export async function getStaticPaths() {
     props: post,
   }));
 }
+
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
 const { Content } = await post.render();
-
-const categoryLabels = { book: 'Book', tech: 'Tech' } as const;
-const category = categoryLabels[post.data.category];
-const dateLabel = post.data.pubDate.toLocaleDateString('en-us', {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-});
 ---
 
-<Layout
-  title={post.data.title}
-  description={post.data.description}
-  image={post.data.heroImage?.src}
-  imageWidth={post.data.heroImage?.width}
-  imageHeight={post.data.heroImage?.height}
-  article={true}
-  publishedTime={post.data.pubDate.toISOString()}
-  modifiedTime={post.data.updatedDate?.toISOString()}
-  tags={post.data.tags}
-  wide={true}
->
-  <div class="mx-auto mt-6 flex max-w-4xl gap-10 sm:mt-10 xl:max-w-6xl">
-    <article
-      class="surface min-w-0 flex-1 rounded-3xl px-5 py-8 sm:px-10 sm:py-12"
-    >
-      <button
-        id="back-to-list"
-        type="button"
-        class="press inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold text-token-nav transition-colors hover:bg-token-hover hover:text-token-primary"
-      >
-        ← 목록으로
-      </button>
-
-      <div class="mt-6 flex flex-wrap items-center gap-3">
-        <span
-          class="rounded-full bg-token-accent-soft px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-token-link"
-          >{category}</span
-        >
-        <span class="font-mono text-[13px] text-token-date">{dateLabel}</span>
-      </div>
-
-      <h1
-        class="mt-4 text-3xl font-bold leading-[1.15] tracking-tight text-token-primary break-keep break-words sm:text-[42px]"
-        style="scroll-margin-top: 4rem;"
-      >
-        {post.data.title}
-      </h1>
-
-      {
-        post.data.heroImage && (
-          <div class="mt-8 overflow-hidden rounded-2xl">
-            <Image
-              src={post.data.heroImage}
-              alt={post.data.title}
-              widths={[768, 1152, 1536]}
-              sizes="(min-width: 768px) 768px, 100vw"
-              format="webp"
-              quality={80}
-              loading="eager"
-              fetchpriority="high"
-              class="w-full object-cover"
-            />
-          </div>
-        )
-      }
-
-      <div class="prose prose-lg mt-8 max-w-none">
-        <Content />
-      </div>
-
-      {
-        post.data.tags.length > 0 && (
-          <div class="mt-10 flex flex-wrap gap-1.5 border-t border-token-primary pt-6">
-            {post.data.tags.map((tag) => (
-              <span class="rounded-full border border-token-primary px-2.5 py-1 font-mono text-[11px] text-token-secondary">
-                #{tag}
-              </span>
-            ))}
-          </div>
-        )
-      }
-    </article>
-
-    <!-- Table of Contents (우측 고정) -->
-    <TableOfContents />
-  </div>
-</Layout>
-
-<script>
-  // "목록으로": 같은 사이트(목록)에서 들어왔으면 뒤로가기로 돌아가, 브라우저의
-  // 스크롤 복원으로 보던 위치 그대로 간다. 아니면(직접 방문·외부 유입) 홈으로.
-  document.getElementById('back-to-list')?.addEventListener('click', () => {
-    if (history.length > 1 && document.referrer.startsWith(location.origin)) {
-      history.back();
-    } else {
-      location.href = import.meta.env.BASE_URL;
-    }
-  });
-</script>
+<BlogPostLayout post={post}>
+  <Content />
+</BlogPostLayout>

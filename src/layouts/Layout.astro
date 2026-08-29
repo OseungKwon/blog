@@ -20,9 +20,25 @@ interface Props {
   profile?: boolean;
   noBackdrop?: boolean;
   compactHeader?: boolean;
+  readingProgress?: boolean;
 }
 
-const { title, description, image, imageWidth, imageHeight, article, publishedTime, modifiedTime, tags, wide = false, profile, noBackdrop = false, compactHeader = false } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  imageWidth,
+  imageHeight,
+  article,
+  publishedTime,
+  modifiedTime,
+  tags,
+  wide = false,
+  profile,
+  noBackdrop = false,
+  compactHeader = false,
+  readingProgress = false,
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -43,7 +59,7 @@ const { title, description, image, imageWidth, imageHeight, article, publishedTi
     <ThemeInit />
   </head>
   <body class:list={['flex min-h-screen flex-col', { 'no-backdrop': noBackdrop }]}>
-    <ReadingProgress />
+    {readingProgress && <ReadingProgress />}
     <Header wide={wide} compact={compactHeader} />
     <main class:list={['mx-auto w-full flex-1 px-4 pt-4 pb-6 sm:px-6 lg:px-8', wide ? 'max-w-6xl' : 'max-w-5xl']}>
       <slot />
