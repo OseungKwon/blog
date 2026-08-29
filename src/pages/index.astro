@@ -1,28 +1,22 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 import PostListItem from '../components/PostListItem.astro';
 import FeaturedPost from '../components/FeaturedPost.astro';
 import { getPublishedPosts } from '../utils/posts';
 
-const posts = (await getPublishedPosts()).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getPublishedPosts()).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const formatDate = (d: Date) =>
-  d.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' });
+const formatDate = (d: Date) => d.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' });
 
 const [featured, ...rest] = posts;
 ---
 
-<Layout>
+<SiteLayout>
   <!-- 히어로: 한 줄 소개. 라이브러리 내부 분석과 아키텍처 설계라는 두 축을
        병렬 문장으로 담담하게 말한다. 무게는 아래 카드로. -->
   <section class="pt-7 pb-1 sm:pt-11">
-    <h1
-      class="max-w-4xl text-[17px] font-semibold leading-[1.6] tracking-tight text-token-primary break-keep sm:text-[19px]"
-    >
-      라이브러리가 실제로 어떻게 동작하는지 내부를 뜯어보고, 프론트엔드
-      아키텍처를 어떻게 설계할지 고민합니다
+    <h1 class="max-w-4xl text-[17px] font-semibold leading-[1.6] tracking-tight text-token-primary break-keep sm:text-[19px]">
+      라이브러리가 실제로 어떻게 동작하는지 내부를 뜯어보고, 프론트엔드 아키텍처를 어떻게 설계할지 고민합니다
     </h1>
   </section>
 
@@ -31,9 +25,7 @@ const [featured, ...rest] = posts;
   {
     featured && (
       <div class="mt-9 sm:mt-12">
-        <h2 class="mb-4 font-mono text-xs font-bold uppercase tracking-[0.18em] text-token-secondary">
-          최신 글
-        </h2>
+        <h2 class="mb-4 font-mono text-xs font-bold uppercase tracking-[0.18em] text-token-secondary">최신 글</h2>
         <div class="featured-halo">
           <FeaturedPost
             title={featured.data.title}
@@ -50,11 +42,7 @@ const [featured, ...rest] = posts;
 
   <div class="mt-10 border-t-[0.5px] border-token-primary pt-6 sm:mt-14">
     <div class="flex items-baseline gap-3">
-      <h2
-        class="font-mono text-xs font-bold uppercase tracking-[0.18em] text-token-secondary"
-      >
-        지난 글
-      </h2>
+      <h2 class="font-mono text-xs font-bold uppercase tracking-[0.18em] text-token-secondary">지난 글</h2>
       <span class="font-mono text-xs font-bold text-token-accent">{rest.length}</span>
     </div>
     <div class="mt-4 flex flex-col gap-3">
@@ -73,4 +61,4 @@ const [featured, ...rest] = posts;
       }
     </div>
   </div>
-</Layout>
+</SiteLayout>

@@ -1,0 +1,32 @@
+---
+import '../styles/global.css';
+import SeoHead from '../components/site/SeoHead.astro';
+import ThemeInit from '../components/site/ThemeInit.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  article?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+  profile?: boolean;
+  bodyClass?: string;
+}
+
+const { bodyClass, ...seo } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <SeoHead {...seo} />
+    <ThemeInit />
+  </head>
+  <body class:list={['flex min-h-screen flex-col', bodyClass]}>
+    <slot />
+  </body>
+</html>

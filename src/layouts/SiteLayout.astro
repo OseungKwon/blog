@@ -1,0 +1,31 @@
+---
+import ReadingProgress from '../components/site/ReadingProgress.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  article?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  tags?: string[];
+  container?: 'default' | 'wide';
+  readingProgress?: boolean;
+}
+
+const { container = 'default', readingProgress = false, ...seo } = Astro.props;
+---
+
+<BaseLayout {...seo}>
+  {readingProgress && <ReadingProgress />}
+  <SiteHeader container={container} />
+  <main class:list={['mx-auto w-full flex-1 px-4 pt-4 pb-6 sm:px-6 lg:px-8', container === 'wide' ? 'max-w-6xl' : 'max-w-5xl']}>
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>

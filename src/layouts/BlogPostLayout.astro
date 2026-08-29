@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import PostBackButton from '../components/blog/PostBackButton.astro';
 import TableOfContents from '../components/TableOfContents.astro';
-import Layout from './Layout.astro';
+import SiteLayout from './SiteLayout.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -19,7 +19,7 @@ const dateLabel = post.data.pubDate.toLocaleDateString('en-us', {
 });
 ---
 
-<Layout
+<SiteLayout
   title={post.data.title}
   description={post.data.description}
   image={post.data.heroImage?.src}
@@ -29,7 +29,7 @@ const dateLabel = post.data.pubDate.toLocaleDateString('en-us', {
   publishedTime={post.data.pubDate.toISOString()}
   modifiedTime={post.data.updatedDate?.toISOString()}
   tags={post.data.tags}
-  wide
+  container="wide"
   readingProgress
 >
   <div class="mx-auto mt-6 flex max-w-4xl gap-10 sm:mt-10 xl:max-w-6xl">
@@ -82,4 +82,4 @@ const dateLabel = post.data.pubDate.toLocaleDateString('en-us', {
 
     <TableOfContents />
   </div>
-</Layout>
+</SiteLayout>

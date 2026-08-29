@@ -1,5 +1,5 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
 
 const BASE = import.meta.env.BASE_URL;
 
@@ -25,10 +25,7 @@ const channels = [
 ];
 ---
 
-<Layout
-  title="Contact"
-  description="프론트엔드 개발자 오승에게 이메일로 연락하거나 GitHub와 RSS를 확인할 수 있습니다."
->
+<SiteLayout title="Contact" description="프론트엔드 개발자 오승에게 이메일로 연락하거나 GitHub와 RSS를 확인할 수 있습니다.">
   <article class="contact-page">
     <header class="contact-hero">
       <p class="contact-eyebrow">Contact</p>
@@ -36,9 +33,7 @@ const channels = [
         함께 이야기할 주제가 있다면,<br />
         이메일로 보내주세요.
       </h1>
-      <p class="contact-introduction">
-        채용, 프로젝트 협업, 기술 글에 대한 의견을 기다립니다.
-      </p>
+      <p class="contact-introduction">채용, 프로젝트 협업, 기술 글에 대한 의견을 기다립니다.</p>
     </header>
 
     <section class="contact-channels" aria-label="연락 및 구독 링크">
@@ -46,12 +41,7 @@ const channels = [
         {
           channels.map((channel) => (
             <li>
-              <a
-                class="channel-link"
-                href={channel.href}
-                target={channel.external ? '_blank' : undefined}
-                rel={channel.external ? 'noopener noreferrer' : undefined}
-              >
+              <a class="channel-link" href={channel.href} target={channel.external ? '_blank' : undefined} rel={channel.external ? 'noopener noreferrer' : undefined}>
                 <span class="channel-label">{channel.label}</span>
                 <span class="channel-description">{channel.description}</span>
                 <svg viewBox="0 0 20 20" aria-hidden="true">
@@ -64,7 +54,7 @@ const channels = [
       </ul>
     </section>
   </article>
-</Layout>
+</SiteLayout>
 
 <style>
   .contact-page {

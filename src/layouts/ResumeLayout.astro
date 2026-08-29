@@ -1,14 +1,18 @@
 ---
-import Layout from './Layout.astro';
+import CompactHeader from '../components/site/CompactHeader.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import BaseLayout from './BaseLayout.astro';
 ---
 
-<Layout
+<BaseLayout
   title="경력기술서 · 권오승"
   description="프론트엔드 개발자 권오승의 경력기술서. 패스오더에서 진행한 서비스 개발, 백오피스, 개발 플랫폼과 웹 인프라 프로젝트를 정리했습니다."
-  wide
   profile
-  noBackdrop
-  compactHeader
+  bodyClass="no-backdrop"
 >
-  <slot />
-</Layout>
+  <CompactHeader />
+  <main class="mx-auto w-full max-w-6xl flex-1 px-4 pt-4 pb-6 sm:px-6 lg:px-8">
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>
