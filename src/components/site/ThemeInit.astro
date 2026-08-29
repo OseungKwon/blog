@@ -1,0 +1,10 @@
+<script is:inline>
+  // 첫 페인트 전에 저장된 테마를 적용해 색상 전환 깜빡임을 막는다.
+  (function () {
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  })();
+</script>

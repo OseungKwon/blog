@@ -1,4 +1,6 @@
 ---
+import ThemeToggle from './site/ThemeToggle.astro';
+
 interface Props {
   wide?: boolean;
   compact?: boolean;
@@ -14,29 +16,12 @@ const isContact = path === `${base}/contact`;
 ---
 
 <header
-  class:list={[
-    'sticky z-50 w-full',
-    compact
-      ? 'border-token-primary bg-token-primary top-0 border-b'
-      : 'mx-auto top-3 px-4 sm:top-4 sm:px-6 lg:px-8',
-    !compact && (wide ? 'max-w-6xl' : 'max-w-5xl'),
-  ]}
+  class:list={['sticky z-50 w-full', compact ? 'border-token-primary bg-token-primary top-0 border-b' : 'mx-auto top-3 px-4 sm:top-4 sm:px-6 lg:px-8', !compact && (wide ? 'max-w-6xl' : 'max-w-5xl')]}
 >
-  <nav
-    class:list={[
-      'flex items-center justify-between gap-3',
-      compact
-        ? 'vt-navbar mx-auto max-w-[59rem] px-4 py-2.5 sm:px-6 lg:px-8'
-        : 'surface vt-navbar rounded-full py-2 pr-2 pl-5 sm:pl-6',
-    ]}
-  >
+  <nav class:list={['flex items-center justify-between gap-3', compact ? 'vt-navbar mx-auto max-w-[59rem] px-4 py-2.5 sm:px-6 lg:px-8' : 'surface vt-navbar rounded-full py-2 pr-2 pl-5 sm:pl-6']}>
     {
       compact ? (
-        <a
-          href={BASE}
-          class="group flex min-h-8 items-center gap-1.5 text-[13px] font-semibold text-token-secondary transition-colors hover:text-token-primary"
-          aria-label="기술블로그로 돌아가기"
-        >
+        <a href={BASE} class="group flex min-h-8 items-center gap-1.5 text-[13px] font-semibold text-token-secondary transition-colors hover:text-token-primary" aria-label="기술블로그로 돌아가기">
           <svg
             class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-0.5"
             viewBox="0 0 24 24"
@@ -53,16 +38,8 @@ const isContact = path === `${base}/contact`;
           기술블로그
         </a>
       ) : (
-        <a
-          href={BASE}
-          class="flex items-center gap-2 text-token-primary"
-          aria-label="오승의 기술블로그 홈"
-        >
-          <svg
-            class="h-[22px] w-[22px] shrink-0"
-            viewBox="0 0 128 128"
-            aria-hidden="true"
-          >
+        <a href={BASE} class="flex items-center gap-2 text-token-primary" aria-label="오승의 기술블로그 홈">
+          <svg class="h-[22px] w-[22px] shrink-0" viewBox="0 0 128 128" aria-hidden="true">
             <defs>
               <linearGradient id="hdr-mark" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#3d97ff" />
@@ -77,9 +54,7 @@ const isContact = path === `${base}/contact`;
               <path d="M0 0 H128 V60 Q66 28 0 72 Z" fill="#fff" opacity="0.2" />
             </g>
           </svg>
-          <span class="hidden text-[15px] font-semibold tracking-tight min-[520px]:inline sm:text-base">
-            오승의 기술블로그
-          </span>
+          <span class="hidden text-[15px] font-semibold tracking-tight min-[520px]:inline sm:text-base">오승의 기술블로그</span>
         </a>
       )
     }
@@ -93,9 +68,7 @@ const isContact = path === `${base}/contact`;
               aria-current={isHome ? 'page' : undefined}
               class:list={[
                 'relative isolate rounded-full px-3.5 py-2 text-sm font-semibold transition-colors',
-                isHome
-                  ? 'text-token-link'
-                  : 'text-token-nav hover:bg-token-hover hover:text-token-primary',
+                isHome ? 'text-token-link' : 'text-token-nav hover:bg-token-hover hover:text-token-primary',
               ]}
             >
               {isHome && <span class="nav-pill-bg" aria-hidden="true" />}홈
@@ -105,9 +78,7 @@ const isContact = path === `${base}/contact`;
               aria-current={isAbout ? 'page' : undefined}
               class:list={[
                 'relative isolate rounded-full px-3.5 py-2 text-sm font-semibold transition-colors',
-                isAbout
-                  ? 'text-token-link'
-                  : 'text-token-nav hover:bg-token-hover hover:text-token-primary',
+                isAbout ? 'text-token-link' : 'text-token-nav hover:bg-token-hover hover:text-token-primary',
               ]}
             >
               {isAbout && <span class="nav-pill-bg" aria-hidden="true" />}
@@ -118,9 +89,7 @@ const isContact = path === `${base}/contact`;
               aria-current={isContact ? 'page' : undefined}
               class:list={[
                 'relative isolate rounded-full px-3.5 py-2 text-sm font-semibold transition-colors',
-                isContact
-                  ? 'text-token-link'
-                  : 'text-token-nav hover:bg-token-hover hover:text-token-primary',
+                isContact ? 'text-token-link' : 'text-token-nav hover:bg-token-hover hover:text-token-primary',
               ]}
             >
               {isContact && <span class="nav-pill-bg" aria-hidden="true" />}
@@ -129,42 +98,7 @@ const isContact = path === `${base}/contact`;
           </div>
         )
       }
-      <button
-        id="dark-mode-toggle"
-        class:list={[
-          'grid shrink-0 cursor-pointer place-items-center rounded-full text-token-nav transition-colors hover:bg-token-hover hover:text-token-primary',
-          compact ? 'h-8 w-8' : 'h-9 w-9',
-        ]}
-        aria-label="다크모드 토글"
-      >
-        <svg
-          id="sun-icon"
-          class="h-[18px] w-[18px] dark:hidden"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          viewBox="0 0 24 24"
-        >
-          <circle cx="12" cy="12" r="4"></circle>
-          <path
-            d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
-          ></path>
-        </svg>
-        <svg
-          id="moon-icon"
-          class="hidden h-[18px] w-[18px] dark:block"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          viewBox="0 0 24 24"
-        >
-          <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path>
-        </svg>
-      </button>
+      <ThemeToggle compact={compact} />
     </div>
   </nav>
 </header>

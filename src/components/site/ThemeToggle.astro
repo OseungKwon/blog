@@ -1,0 +1,48 @@
+---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<button
+  data-theme-toggle
+  type="button"
+  class:list={['grid shrink-0 cursor-pointer place-items-center rounded-full text-token-nav transition-colors hover:bg-token-hover hover:text-token-primary', compact ? 'h-8 w-8' : 'h-9 w-9']}
+  aria-label="다크모드 토글"
+>
+  <svg class="h-[18px] w-[18px] dark:hidden" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+  </svg>
+  <svg class="hidden h-[18px] w-[18px] dark:block" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"></path>
+  </svg>
+</button>
+
+<script>
+  const toggleTheme = () => {
+    const html = document.documentElement;
+    const isDark = html.classList.contains('dark');
+
+    html.classList.add('theme-switching');
+    html.classList.toggle('dark', !isDark);
+    localStorage.theme = isDark ? 'light' : 'dark';
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        html.classList.remove('theme-switching');
+      });
+    });
+  };
+
+  document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((button) => {
+    button.addEventListener('click', toggleTheme);
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+    if ('theme' in localStorage) return;
+    document.documentElement.classList.toggle('dark', event.matches);
+  });
+</script>

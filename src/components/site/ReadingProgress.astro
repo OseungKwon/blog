@@ -1,0 +1,26 @@
+<div id="reading-progress"></div>
+
+<script>
+  const bar = document.getElementById('reading-progress');
+
+  if (bar) {
+    let ticking = false;
+
+    const render = () => {
+      ticking = false;
+      const documentElement = document.documentElement;
+      const max = documentElement.scrollHeight - documentElement.clientHeight;
+      bar.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+    };
+
+    const schedule = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(render);
+    };
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule, { passive: true });
+    render();
+  }
+</script>
