@@ -16,7 +16,7 @@ export async function GET(context: APIContext) {
   const entries = [
     ...STATIC_PATHS.map((path) => ({ loc: new URL(path, site).href })),
     ...posts.map((post) => ({
-      loc: new URL(`/post/${post.slug}/`, site).href,
+      loc: new URL(`/post/${post.id}/`, site).href,
       // 수정일이 없으면 발행일을 lastmod로 쓴다. 크롤러가 변경 글을 우선 재수집하게 한다.
       lastmod: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
     })),

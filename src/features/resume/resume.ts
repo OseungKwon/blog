@@ -1,4 +1,4 @@
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getResume() {
   const projects = await Promise.all(
@@ -11,7 +11,7 @@ export async function getResume() {
       .map(async (project, projectIndex) => ({
         ...project,
         projectIndex,
-        Content: (await project.render()).Content,
+        Content: (await render(project)).Content,
       })),
   );
 
