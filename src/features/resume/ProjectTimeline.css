@@ -1,0 +1,142 @@
+resume-project-timeline {
+  display: block;
+}
+
+.projects-section {
+  margin-top: 3rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: 0.5rem;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.section-title h2 {
+  font-size: 1.25rem;
+  font-weight: 720;
+  letter-spacing: -0.015em;
+}
+
+.section-meta {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-date);
+}
+
+.project-expand-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.1rem;
+  padding-inline: 0.8rem;
+  border: 1px solid var(--resume-rule);
+  border-radius: 999px;
+  background: var(--surface-bg);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.project-expand-all:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--color-text-primary) 24%,
+    var(--resume-rule)
+  );
+  color: var(--color-text-primary);
+}
+
+.project-expand-all:focus-visible {
+  outline: 2px solid
+    color-mix(in srgb, var(--color-text-primary) 48%, transparent);
+  outline-offset: 2px;
+}
+
+.project-expand-all svg {
+  width: 0.75rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 160ms ease;
+}
+
+.project-expand-all[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.project-year-list {
+  display: grid;
+  gap: 2rem;
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 680px) {
+  .projects-section {
+    margin-top: 2.5rem;
+  }
+
+  .section-title {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+
+  .section-heading {
+    justify-content: space-between;
+  }
+
+  .project-expand-all {
+    align-self: flex-end;
+  }
+
+  .project-year-list {
+    gap: 1.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-expand-all svg {
+    transition: none;
+  }
+}
+
+@media print {
+  .projects-section {
+    margin-top: 7mm;
+  }
+
+  .section-title {
+    padding: 0 0 3mm;
+  }
+
+  .section-title h2 {
+    font-size: 12pt;
+  }
+
+  .section-meta {
+    font-size: 7pt;
+  }
+
+  .project-year-list {
+    display: block;
+    margin-top: 8mm;
+  }
+
+  [data-print-hidden] {
+    display: none !important;
+  }
+}

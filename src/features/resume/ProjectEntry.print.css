@@ -1,0 +1,153 @@
+@media print {
+  .project-entry {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    break-inside: auto;
+  }
+
+  .project-entry::details-content {
+    block-size: auto !important;
+    overflow: visible;
+    content-visibility: visible;
+  }
+
+  .project-entry + .project-entry {
+    margin-top: 9mm;
+  }
+
+  .project-summary {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    padding: 4mm 0 5mm;
+    border-top: 2px solid var(--color-text-primary);
+    border-bottom: 1px solid var(--resume-rule);
+  }
+
+  .print-project-index {
+    display: block;
+    margin-bottom: 2.5mm;
+    font-family: var(--font-mono);
+    font-size: 6.5pt;
+    font-weight: 650;
+    letter-spacing: 0.1em;
+    color: var(--color-text-date);
+  }
+
+  .project-title-row {
+    justify-content: space-between;
+    gap: 4mm;
+  }
+
+  .project-summary-main h4 {
+    font-size: 16pt;
+    line-height: 1.25;
+    color: var(--color-text-primary) !important;
+  }
+
+  .project-title-row time {
+    padding: 0;
+    border: 0;
+    font-size: 7.5pt;
+  }
+
+  .project-summary-lead {
+    margin-top: 2mm;
+    gap: 2mm;
+  }
+
+  .project-summary-lead > p {
+    font-size: 9pt;
+    line-height: 1.55;
+  }
+
+  .project-proof-link {
+    font-size: 7.5pt;
+  }
+
+  .project-facts {
+    gap: 2.5mm;
+    margin-top: 4mm;
+    padding-top: 4mm;
+  }
+
+  .project-facts dd > strong {
+    font-size: 8.5pt;
+  }
+
+  .technology-list {
+    gap: 0;
+  }
+
+  .technology-list li {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    font-size: 7.5pt;
+  }
+
+  .technology-list li:not(:last-child)::after {
+    content: '·';
+    margin-inline: 2mm;
+    color: var(--color-text-date);
+  }
+
+  .project-toggle {
+    display: none;
+  }
+
+  .project-detail {
+    display: block !important;
+    margin: 0;
+    padding: 5mm 0 0;
+    border-top: 0;
+    opacity: 1;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .project-summary,
+  .project-change,
+  .project-content h2 {
+    break-inside: avoid;
+  }
+
+  .project-change {
+    margin-top: 5mm;
+    border-radius: 1mm;
+  }
+
+  .project-content {
+    margin-top: 6mm;
+  }
+
+  .project-content h2:not(:first-child) {
+    margin-top: 5mm;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .project-content h2:not(:first-child)::before {
+    content: '';
+    display: block;
+    width: 10mm;
+    height: 1px;
+    margin-bottom: 5mm;
+    background: var(--resume-rule);
+  }
+
+  .project-content h2 {
+    font-size: 11pt;
+    break-after: avoid-page;
+  }
+
+  .project-content p {
+    margin-top: 2mm;
+    font-size: 8.7pt;
+    line-height: 1.68;
+    orphans: 3;
+    widows: 3;
+  }
+}

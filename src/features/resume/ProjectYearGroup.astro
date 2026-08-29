@@ -1,0 +1,66 @@
+---
+import type { ResumeProjectGroup } from './resume';
+import ProjectEntry from './ProjectEntry.astro';
+
+interface Props {
+  group: ResumeProjectGroup;
+}
+
+const { group } = Astro.props;
+---
+
+<section class="project-year-group" aria-labelledby={`project-year-${group.year}`}>
+  <header class="project-year-heading">
+    <h3 id={`project-year-${group.year}`}>{group.year}</h3>
+    <span>{group.projects.length}개 프로젝트</span>
+  </header>
+
+  <div class="project-stack">
+    {group.projects.map((project) => <ProjectEntry project={project} />)}
+  </div>
+</section>
+
+<style>
+  .project-year-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 0.5rem 0.65rem;
+    border-bottom: 1px solid var(--resume-rule);
+  }
+
+  .project-year-heading h3 {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--color-text-primary);
+  }
+
+  .project-year-heading span {
+    font-size: 0.75rem;
+    color: var(--color-text-date);
+  }
+
+  .project-stack {
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.85rem;
+  }
+
+  @media print {
+    .project-year-heading {
+      display: none;
+    }
+
+    .project-stack {
+      display: block;
+      margin-top: 0;
+    }
+
+    .project-year-group:not(:first-child) {
+      margin-top: 9mm;
+    }
+  }
+</style>

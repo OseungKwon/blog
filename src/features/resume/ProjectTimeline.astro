@@ -1,0 +1,37 @@
+---
+import type { ResumeProjectGroup } from './resume';
+import ProjectYearGroup from './ProjectYearGroup.astro';
+import './ProjectTimeline.css';
+
+interface Props {
+  groups: ResumeProjectGroup[];
+  projectCount: number;
+  yearsLabel: string;
+}
+
+const { groups, projectCount, yearsLabel } = Astro.props;
+---
+
+<resume-project-timeline>
+  <section class="projects-section" aria-labelledby="projects-title">
+    <div class="section-title">
+      <div class="section-heading">
+        <h2 id="projects-title">패스오더 주요 프로젝트</h2>
+        <span class="section-meta">{projectCount}개 · {yearsLabel}</span>
+      </div>
+
+      <button class="project-expand-all" type="button" aria-controls="project-list" aria-expanded="false" data-project-expand-all data-print-hidden>
+        <span data-project-expand-label>전체 펼치기</span>
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="m4 6 4 4 4-4"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="project-year-list" id="project-list">
+      {groups.map((group) => <ProjectYearGroup group={group} />)}
+    </div>
+  </section>
+</resume-project-timeline>
+
+<script src="./project-timeline.ts"></script>
