@@ -1,0 +1,104 @@
+---
+import CareerIntroduction from './CareerIntroduction.astro';
+import CareerOverview from './CareerOverview.astro';
+import ProjectTimeline from './ProjectTimeline.astro';
+import ResumeFooter from './ResumeFooter.astro';
+import ResumeHeader from './ResumeHeader.astro';
+import type { ResumeViewModel } from './resume';
+
+interface Props {
+  resume: ResumeViewModel;
+}
+
+const { resume } = Astro.props;
+---
+
+<article class="resume-page">
+  <ResumeHeader />
+  <CareerIntroduction />
+  <CareerOverview />
+  <ProjectTimeline groups={resume.projectGroups} projectCount={resume.projectCount} yearsLabel={resume.projectYearsLabel} />
+  <ResumeFooter lastUpdated={resume.lastUpdated} />
+</article>
+
+<style>
+  .resume-page {
+    width: 100%;
+    max-width: 55rem;
+    margin: 0 auto;
+    padding: 3.5rem 0 5rem;
+    --resume-rule: var(--color-border-secondary);
+    --diff-delete-bg: #ffebe9;
+    --diff-delete-gutter: #ffd7d5;
+    --diff-delete-text: #82071e;
+    --diff-add-bg: #dafbe1;
+    --diff-add-gutter: #aceebb;
+    --diff-add-text: #116329;
+  }
+
+  :global(.dark) .resume-page {
+    --diff-delete-bg: #3f1d1d;
+    --diff-delete-gutter: #602020;
+    --diff-delete-text: #ffb3ad;
+    --diff-add-bg: #1b3a2a;
+    --diff-add-gutter: #235d38;
+    --diff-add-text: #7ee2a8;
+  }
+
+  @media (max-width: 680px) {
+    .resume-page {
+      padding-top: 2.5rem;
+    }
+  }
+
+  @media print {
+    :global(html) {
+      color-scheme: light;
+      font-size: 9.5pt;
+    }
+
+    :global(body),
+    :global(html.dark body) {
+      background: white !important;
+      color: #0a0c10 !important;
+    }
+
+    :global(body::before),
+    :global(body > header),
+    :global(body > footer),
+    :global(#reading-progress) {
+      display: none !important;
+    }
+
+    :global(main) {
+      max-width: none !important;
+      padding: 0 !important;
+    }
+
+    .resume-page {
+      --color-text-primary: #0a0c10;
+      --color-text-secondary: #3f454e;
+      --color-text-date: #707782;
+      --color-accent: #006fff;
+      --color-border-secondary: #d8dde5;
+      --surface-bg: #ffffff;
+      --surface-border: #d8dde5;
+      --surface-shadow: none;
+      --diff-delete-bg: #ffebe9;
+      --diff-delete-gutter: #ffd7d5;
+      --diff-delete-text: #82071e;
+      --diff-add-bg: #dafbe1;
+      --diff-add-gutter: #aceebb;
+      --diff-add-text: #116329;
+      width: auto;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    @page {
+      size: A4;
+      margin: 14mm 15mm;
+    }
+  }
+</style>
