@@ -1,6 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ResumeMetaRow from '../components/ResumeMetaRow.astro';
+import CareerIntroduction from '../features/resume/CareerIntroduction.astro';
+import CareerOverview from '../features/resume/CareerOverview.astro';
+import ResumeFooter from '../features/resume/ResumeFooter.astro';
+import ResumeHeader from '../features/resume/ResumeHeader.astro';
+import ResumeMetaRow from '../features/resume/ResumeMetaRow.astro';
 import { getResume } from '../features/resume/resume';
 
 const BASE = import.meta.env.BASE_URL;
@@ -17,82 +21,9 @@ const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await ge
   compactHeader
 >
   <article class="resume-page">
-    <header class="resume-header">
-      <div class="identity">
-        <p>Frontend Engineer</p>
-        <h1>권오승</h1>
-      </div>
-
-      <div class="contact-list" aria-label="연락처">
-        <a href="mailto:00osos@naver.com">
-          <span class="contact-label">Email</span>
-          <span>00osos@naver.com</span>
-        </a>
-        <a href="https://github.com/oseungkwon" target="_blank" rel="noopener noreferrer">
-          <span class="contact-label">GitHub</span>
-          <span>github.com/oseungkwon</span>
-        </a>
-        <a href={BASE}>
-          <span class="contact-label">Blog</span>
-          <span>오승의 기술블로그</span>
-        </a>
-      </div>
-
-      <button class="print-button press" type="button" data-print-resume data-print-hidden>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"></path>
-        </svg>
-        PDF로 저장
-      </button>
-    </header>
-
-    <section class="career-introduction" aria-labelledby="career-introduction-title">
-      <h2 id="career-introduction-title">
-        PM처럼 제품의 목적을 끝까지 파고들고,<br />
-        디자이너처럼 작은 차이를 놓치지 않는 프론트엔드 개발자 권오승입니다.
-      </h2>
-
-      <div class="career-introduction-copy">
-        <p>
-          기획서를 받으면 구현할 기능부터 확인하기보다,
-          <strong>사용자가 어떤 흐름을 거쳐 이 기능을 이용하게 될지</strong>
-          먼저 살펴봅니다. 사용자 흐름 속에서 개선할 만한 부분이 보이면 개선안을 제안하고, 디자이너와 소통하며 화면에 담긴 의도와 맥락까지 이해한 뒤 설계에 들어갑니다.
-        </p>
-        <p>
-          프로젝트의 전 과정에 참여하면서 요구사항은 언제든 달라질 수 있다는 점을 경험했고, <strong>변화에 유연하게 대응할 수 있는 개발 구조</strong>가 필요하다고 느꼈습니다. 기획이나 디자인이 바뀔
-          때마다 코드 곳곳을 수정하는 문제를 줄이기 위해 <strong>함수형 프로그래밍과 클린 아키텍처, FSD</strong>를 공부했습니다. 이를 반영한 구조를 팀에 제안해 실제 프로젝트에 적용했고, 현재는 전사 웹
-          프로젝트의 공통 개발 방식으로 사용하고 있습니다.
-        </p>
-        <p>
-          경험이 쌓이면서 제가 작성하는 코드뿐 아니라
-          <strong>팀이 반복해서 겪는 불편</strong>에도 관심을 갖게 됐습니다. 프로젝트마다 다시 만들던 UI를 <strong>디자인 시스템</strong>으로 정리하고, 화면 곳곳에 흩어져 있던 이벤트 로직은 <strong
-            >선언형 트래킹 라이브러리</strong
-          >로 통합했습니다. 최근에는 n8n을 사용해 업무를 자동화하고, 프로젝트에서 정한 개발 방식과 품질 기준을 따르도록 <strong>AI 워크플로우</strong>를 구축해 작업 시간과 시행착오를 줄였습니다.
-        </p>
-        <p>
-          "저는 그동안
-          <strong>웹 주문과 결제, 상품권, 적립, 사장님 페이지, 디자인 시스템 등 회사의 주요 프로젝트</strong>
-          를 맡아 진행했습니다. 현재는 Next.js 기반 서비스 개발을 중심으로 업무를 진행하고 있으며,
-          <strong>모니터링 시스템 구축과 CI/CD 최적화, 웹 서버 운영</strong>
-          까지 담당하며 제품의 개발부터 운영까지 함께하고 있습니다."
-        </p>
-      </div>
-    </section>
-
-    <dl class="career-overview" aria-label="경력 요약">
-      <div>
-        <dt>회사</dt>
-        <dd>패스오더</dd>
-      </div>
-      <div>
-        <dt>경력</dt>
-        <dd>Frontend Engineer · 4년</dd>
-      </div>
-      <div class="career-focus">
-        <dt>주요 영역</dt>
-        <dd>주문·결제 · 상품권 · 적립 · 백오피스 · 이벤트</dd>
-      </div>
-    </dl>
+    <ResumeHeader />
+    <CareerIntroduction />
+    <CareerOverview />
 
     <section class="projects-section" aria-labelledby="projects-title">
       <div class="section-title">
@@ -217,10 +148,7 @@ const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await ge
       </div>
     </section>
 
-    <footer class="resume-footer">
-      <span>권오승 · Frontend Engineer</span>
-      <span>Updated {formatMonth(lastUpdated)}</span>
-    </footer>
+    <ResumeFooter lastUpdated={lastUpdated} />
   </article>
 </Layout>
 
@@ -248,167 +176,9 @@ const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await ge
     --diff-add-text: #7ee2a8;
   }
 
-  .resume-header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 1.1rem 2rem;
-    align-items: end;
-    padding: 0 0.5rem 2rem;
-    border-bottom: 1px solid var(--resume-rule);
-  }
-
-  .identity > p {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-text-date);
-  }
-
-  .identity h1 {
-    margin-top: 0.45rem;
-    font-size: clamp(2.25rem, 4.5vw, 3rem);
-    font-weight: 730;
-    line-height: 1;
-    letter-spacing: -0.045em;
-  }
-
-  .contact-list {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.55rem 1.5rem;
-    align-items: center;
-  }
-
-  .contact-list a {
-    display: inline-flex;
-    gap: 0.45rem;
-    align-items: baseline;
-    font-size: 0.875rem;
-    line-height: 1.4;
-    color: var(--color-text-secondary);
-  }
-
-  .contact-label {
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--color-text-date);
-    text-transform: uppercase;
-  }
-
-  .contact-list a:hover {
-    color: var(--color-accent);
-  }
-
-  .career-introduction {
-    margin: 1.5rem 0.5rem 0;
-  }
-
-  .career-introduction h2 {
-    max-width: 47rem;
-    font-size: clamp(1.35rem, 2.4vw, 1.625rem);
-    font-weight: 650;
-    line-height: 1.5;
-    letter-spacing: -0.035em;
-    color: var(--color-text-primary);
-    word-break: keep-all;
-  }
-
-  .career-introduction-copy {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.9rem;
-    max-width: 52rem;
-    margin-top: 1rem;
-  }
-
-  .career-introduction-copy p {
-    font-size: 1.0625rem;
-    font-weight: 450;
-    line-height: 1.8;
-    color: var(--color-text-primary);
-    word-break: keep-all;
-  }
-
-  .career-introduction-copy strong {
-    font-weight: 650;
-  }
-
-  .print-button {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: end;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    min-height: 2.35rem;
-    padding: 0 0.85rem;
-    border: 1px solid var(--resume-rule);
-    border-radius: 999px;
-    background: var(--surface-bg);
-    color: var(--color-text-primary);
-    font-size: 0.78rem;
-    font-weight: 650;
-    cursor: pointer;
-  }
-
-  .print-button svg {
-    width: 0.9rem;
-    fill: none;
-    stroke: var(--color-accent);
-    stroke-width: 1.8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .print-button:focus-visible,
-  .contact-list a:focus-visible,
   .project-proof-link:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-  }
-
-  .career-overview {
-    display: grid;
-    grid-template-columns: 0.7fr 1.15fr 2fr;
-    margin: 1rem 0.5rem 0;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--resume-rule);
-  }
-
-  .career-overview > div {
-    min-width: 0;
-    padding-inline: 1rem;
-  }
-
-  .career-overview > div:first-child {
-    padding-left: 0;
-  }
-
-  .career-overview > div + div {
-    border-left: 1px solid var(--resume-rule);
-  }
-
-  .career-overview dt {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    color: var(--color-text-date);
-  }
-
-  .career-overview dd {
-    margin-top: 0.35rem;
-    font-size: 0.9375rem;
-    font-weight: 650;
-    line-height: 1.5;
-    color: var(--color-text-primary);
-    word-break: keep-all;
   }
 
   .project-summary:focus-visible {
@@ -852,75 +622,9 @@ const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await ge
     color: var(--color-text-primary);
   }
 
-  .resume-footer {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1rem;
-    padding-inline: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.04em;
-    color: var(--color-text-date);
-  }
-
   @media (max-width: 680px) {
     .resume-page {
       padding-top: 2.5rem;
-    }
-
-    .resume-header {
-      grid-template-columns: 1fr auto;
-      align-items: start;
-      gap: 1.5rem;
-    }
-
-    .contact-list {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      gap: 0.5rem 1rem;
-    }
-
-    .print-button {
-      grid-column: 2;
-      grid-row: 1;
-    }
-
-    .career-overview {
-      grid-template-columns: 1fr 1.45fr;
-      margin-inline: 0;
-      padding-block: 0.9rem;
-    }
-
-    .career-introduction {
-      margin: 1.25rem 0 0;
-    }
-
-    .career-introduction h2 {
-      font-size: 1.25rem;
-      line-height: 1.55;
-    }
-
-    .career-introduction-copy {
-      grid-template-columns: 1fr;
-      gap: 0.75rem;
-      margin-top: 0.85rem;
-    }
-
-    .career-overview > div {
-      padding-inline: 0.75rem;
-    }
-
-    .career-overview > div:first-child {
-      padding-left: 0;
-    }
-
-    .career-overview .career-focus {
-      grid-column: 1 / -1;
-      margin-top: 0.85rem;
-      padding: 0.85rem 0 0;
-      border-top: 1px solid var(--resume-rule);
-      border-left: 0;
     }
 
     .projects-section {
@@ -1036,75 +740,6 @@ const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await ge
       max-width: none;
       margin: 0;
       padding: 0;
-    }
-
-    .resume-header {
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 10mm;
-      padding: 0 0 6mm;
-    }
-
-    .identity h1 {
-      font-size: 26pt;
-    }
-
-    .contact-list {
-      font-size: 8pt;
-    }
-
-    .contact-list a {
-      font-size: 8pt;
-    }
-
-    .contact-label {
-      font-size: 6.5pt;
-    }
-
-    .print-button {
-      display: none;
-    }
-
-    .career-overview {
-      grid-template-columns: 0.7fr 1.15fr 2fr;
-      margin: 3mm 0 0;
-      padding: 3.5mm 0;
-    }
-
-    .career-introduction {
-      margin: 4mm 0 0;
-    }
-
-    .career-introduction h2 {
-      max-width: 155mm;
-      font-size: 12pt;
-      line-height: 1.55;
-    }
-
-    .career-introduction-copy {
-      gap: 2.5mm;
-      margin-top: 3mm;
-    }
-
-    .career-introduction-copy p {
-      font-size: 8pt;
-      line-height: 1.6;
-    }
-
-    .career-overview > div {
-      padding-inline: 4mm;
-    }
-
-    .career-overview > div:first-child {
-      padding-left: 0;
-    }
-
-    .career-overview dt {
-      font-size: 6.5pt;
-    }
-
-    .career-overview dd {
-      margin-top: 1mm;
-      font-size: 8pt;
     }
 
     .projects-section {
@@ -1293,10 +928,6 @@ const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await ge
       widows: 3;
     }
 
-    .resume-footer {
-      display: none;
-    }
-
     @page {
       size: A4;
       margin: 14mm 15mm;
@@ -1346,10 +977,6 @@ const { projectGroups, projectCount, projectYearsLabel, lastUpdated } = await ge
       linkedProject.open = true;
     }
   };
-
-  document.querySelector('[data-print-resume]')?.addEventListener('click', () => {
-    window.print();
-  });
 
   window.addEventListener('hashchange', openLinkedProject);
   window.addEventListener('beforeprint', () => {

@@ -1,0 +1,174 @@
+---
+const BASE = import.meta.env.BASE_URL;
+---
+
+<header class="resume-header">
+  <div class="identity">
+    <p>Frontend Engineer</p>
+    <h1>권오승</h1>
+  </div>
+
+  <div class="contact-list" aria-label="연락처">
+    <a href="mailto:00osos@naver.com">
+      <span class="contact-label">Email</span>
+      <span>00osos@naver.com</span>
+    </a>
+    <a href="https://github.com/oseungkwon" target="_blank" rel="noopener noreferrer">
+      <span class="contact-label">GitHub</span>
+      <span>github.com/oseungkwon</span>
+    </a>
+    <a href={BASE}>
+      <span class="contact-label">Blog</span>
+      <span>오승의 기술블로그</span>
+    </a>
+  </div>
+
+  <button class="print-button press" type="button" data-print-resume data-print-hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"></path>
+    </svg>
+    PDF로 저장
+  </button>
+</header>
+
+<style>
+  .resume-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.1rem 2rem;
+    align-items: end;
+    padding: 0 0.5rem 2rem;
+    border-bottom: 1px solid var(--resume-rule);
+  }
+
+  .identity > p {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-date);
+  }
+
+  .identity h1 {
+    margin-top: 0.45rem;
+    font-size: clamp(2.25rem, 4.5vw, 3rem);
+    font-weight: 730;
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  .contact-list {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem 1.5rem;
+    align-items: center;
+  }
+
+  .contact-list a {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: baseline;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-text-secondary);
+  }
+
+  .contact-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--color-text-date);
+    text-transform: uppercase;
+  }
+
+  .contact-list a:hover {
+    color: var(--color-accent);
+  }
+
+  .print-button {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 2.35rem;
+    padding: 0 0.85rem;
+    border: 1px solid var(--resume-rule);
+    border-radius: 999px;
+    background: var(--surface-bg);
+    color: var(--color-text-primary);
+    font-size: 0.78rem;
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .print-button svg {
+    width: 0.9rem;
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .print-button:focus-visible,
+  .contact-list a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 680px) {
+    .resume-header {
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 1.5rem;
+    }
+
+    .contact-list {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      gap: 0.5rem 1rem;
+    }
+
+    .print-button {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  @media print {
+    .resume-header {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10mm;
+      padding: 0 0 6mm;
+    }
+
+    .identity h1 {
+      font-size: 26pt;
+    }
+
+    .contact-list,
+    .contact-list a {
+      font-size: 8pt;
+    }
+
+    .contact-label {
+      font-size: 6.5pt;
+    }
+
+    .print-button {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelector('[data-print-resume]')?.addEventListener('click', () => {
+    window.print();
+  });
+</script>

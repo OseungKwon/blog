@@ -1,0 +1,33 @@
+---
+interface Props {
+  lastUpdated: string;
+}
+
+const { lastUpdated } = Astro.props;
+const formatMonth = (date: string) => date.replace('-', '.');
+---
+
+<footer class="resume-footer">
+  <span>권오승 · Frontend Engineer</span>
+  <span>Updated {formatMonth(lastUpdated)}</span>
+</footer>
+
+<style>
+  .resume-footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-inline: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.04em;
+    color: var(--color-text-date);
+  }
+
+  @media print {
+    .resume-footer {
+      display: none;
+    }
+  }
+</style>
