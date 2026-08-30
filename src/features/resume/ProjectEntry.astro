@@ -17,47 +17,49 @@ const formatMonth = (date: string) => date.replace('-', '.');
 <details class="project-entry surface" id={`project-${id}`}>
   <summary class="project-summary">
     <div class="project-summary-main">
-      <span class="print-project-index" aria-hidden="true">
-        프로젝트 {String(projectIndex + 1).padStart(2, '0')}
-      </span>
-      <div class="project-summary-header">
-        <div class="project-title-row">
-          <h4>{data.title}</h4>
-          <time datetime={`${data.startDate}/${data.endDate}`}>
-            {formatMonth(data.startDate)} — {formatMonth(data.endDate)}
-          </time>
-        </div>
-
-        <span class="project-toggle" aria-hidden="true">
-          <span class="project-toggle-open">펼치기</span>
-          <span class="project-toggle-close">접기</span>
-          <svg viewBox="0 0 16 16">
-            <path d="m4 6 4 4 4-4"></path>
-          </svg>
+      <div class="project-summary-intro">
+        <span class="print-project-index" aria-hidden="true">
+          프로젝트 {String(projectIndex + 1).padStart(2, '0')}
         </span>
-      </div>
-      <div class="project-summary-lead">
-        <p>{data.summary}</p>
-        {
-          data.links.length > 0 && (
-            <ul class="project-proof-list" aria-label="프로젝트 링크">
-              {data.links.map((link) => (
-                <li>
-                  <a
-                    class="project-proof-link"
-                    href={link.external ? link.href : `${BASE}${link.href}`}
-                    target={link.external ? '_blank' : undefined}
-                    rel={link.external ? 'noopener noreferrer' : undefined}
-                    aria-label={`${link.type}: ${link.label}`}
-                    title={link.label}
-                  >
-                    {link.type} <span aria-hidden="true">↗</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )
-        }
+        <div class="project-summary-header">
+          <div class="project-title-row">
+            <h4>{data.title}</h4>
+            <time datetime={`${data.startDate}/${data.endDate}`}>
+              {formatMonth(data.startDate)} — {formatMonth(data.endDate)}
+            </time>
+          </div>
+
+          <span class="project-toggle" aria-hidden="true">
+            <span class="project-toggle-open">펼치기</span>
+            <span class="project-toggle-close">접기</span>
+            <svg viewBox="0 0 16 16">
+              <path d="m4 6 4 4 4-4"></path>
+            </svg>
+          </span>
+        </div>
+        <div class="project-summary-lead">
+          <p>{data.summary}</p>
+          {
+            data.links.length > 0 && (
+              <ul class="project-proof-list" aria-label="프로젝트 링크">
+                {data.links.map((link) => (
+                  <li>
+                    <a
+                      class="project-proof-link"
+                      href={link.external ? link.href : `${BASE}${link.href}`}
+                      target={link.external ? '_blank' : undefined}
+                      rel={link.external ? 'noopener noreferrer' : undefined}
+                      aria-label={`${link.type}: ${link.label}`}
+                      title={link.label}
+                    >
+                      {link.type} <span aria-hidden="true">↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </div>
       </div>
       <dl class="project-facts">
         <ResumeMetaRow label="성과">

@@ -1,29 +1,34 @@
 @media print {
-  .project-entry {
+  .project-entry.surface {
+    display: contents;
     overflow: visible;
     border: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
+    transition: none;
     break-inside: auto;
   }
 
   .project-entry::details-content {
+    display: contents !important;
     block-size: auto !important;
     overflow: visible;
     content-visibility: visible;
   }
 
-  .project-entry + .project-entry {
-    margin-top: 9mm;
+  .project-entry + .project-entry .project-summary-intro {
+    margin-top: 4mm;
   }
 
-  .project-summary {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-    padding: 4mm 0 5mm;
+  .project-summary,
+  .project-summary-main {
+    display: contents;
+  }
+
+  .project-summary-intro {
+    padding-top: 3mm;
     border-top: 2px solid var(--color-text-primary);
-    border-bottom: 1px solid var(--resume-rule);
   }
 
   .print-project-index {
@@ -54,7 +59,7 @@
   }
 
   .project-summary-lead {
-    margin-top: 2mm;
+    margin-top: 1.5mm;
     gap: 2mm;
   }
 
@@ -68,9 +73,10 @@
   }
 
   .project-facts {
-    gap: 2.5mm;
-    margin-top: 4mm;
-    padding-top: 4mm;
+    gap: 2mm;
+    margin-top: 3mm;
+    padding: 3mm 0 3.5mm;
+    border-bottom: 1px solid var(--resume-rule);
   }
 
   .project-facts dd > strong {
@@ -101,30 +107,31 @@
   .project-detail {
     display: block !important;
     margin: 0;
-    padding: 5mm 0 0;
+    padding: 3.5mm 0 0;
     border-top: 0;
     opacity: 1;
     transform: none;
     box-shadow: none;
   }
 
-  .project-summary,
+  .project-summary-intro,
+  .project-facts,
   .project-change,
   .project-content h2 {
     break-inside: avoid;
   }
 
   .project-change {
-    margin-top: 5mm;
+    margin-top: 3.5mm;
     border-radius: 1mm;
   }
 
   .project-content {
-    margin-top: 6mm;
+    margin-top: 4.5mm;
   }
 
   .project-content h2:not(:first-child) {
-    margin-top: 5mm;
+    margin-top: 4mm;
     padding-top: 0;
     border-top: 0;
   }
@@ -134,20 +141,20 @@
     display: block;
     width: 10mm;
     height: 1px;
-    margin-bottom: 5mm;
+    margin-bottom: 4mm;
     background: var(--resume-rule);
   }
 
   .project-content h2 {
-    font-size: 11pt;
+    font-size: 10.5pt;
     break-after: avoid-page;
   }
 
   .project-content p {
-    margin-top: 2mm;
-    font-size: 8.7pt;
-    line-height: 1.68;
-    orphans: 3;
-    widows: 3;
+    margin-top: 1.8mm;
+    font-size: 8.6pt;
+    line-height: 1.6;
+    orphans: 2;
+    widows: 2;
   }
 }

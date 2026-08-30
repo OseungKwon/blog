@@ -72,7 +72,9 @@ const { resume } = Astro.props;
 
     :global(main) {
       max-width: none !important;
-      padding: 0 !important;
+      padding: 10mm 15mm !important;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
     }
 
     .resume-page {
@@ -98,7 +100,9 @@ const { resume } = Astro.props;
 
     @page {
       size: A4;
-      margin: 14mm 15mm;
+      /* 브라우저가 페이지 여백에 자동으로 넣는 날짜·제목·URL을 제거한다.
+         실제 문서 여백은 main의 print padding으로 유지한다. */
+      margin: 0;
     }
   }
 </style>
