@@ -1,0 +1,102 @@
+<svg width="760" height="960" viewBox="0 0 760 960" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#020617" flood-opacity="0.28"/>
+    </filter>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#38BDF8"/>
+    </marker>
+    <marker id="arrow-violet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#C4B5FD"/>
+    </marker>
+    <marker id="arrow-slate" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94A3B8"/>
+    </marker>
+  </defs>
+
+  <rect width="760" height="960" rx="28" fill="#0F172A"/>
+  <text x="32" y="43" fill="#F8FAFC" font-family="Pretendard, Arial, sans-serif" font-size="24" font-weight="700">배송지 입력 기능의 최종 아키텍처</text>
+  <text x="32" y="68" fill="#94A3B8" font-family="Pretendard, Arial, sans-serif" font-size="14">화살표는 호출과 소스 코드의 의존 방향을 나타냅니다.</text>
+
+  <rect x="32" y="88" width="696" height="66" rx="15" fill="#1E293B" stroke="#475569"/>
+  <rect x="48" y="105" width="144" height="30" rx="15" fill="#334155"/>
+  <text x="120" y="125" text-anchor="middle" fill="#E2E8F0" font-family="Pretendard, Arial, sans-serif" font-size="12" font-weight="700">의존성 조립 지점</text>
+  <text x="210" y="117" fill="#F8FAFC" font-family="Pretendard, Arial, sans-serif" font-size="15" font-weight="700">selectDeliveryAddress.ts</text>
+  <text x="210" y="138" fill="#94A3B8" font-family="Pretendard, Arial, sans-serif" font-size="13">구현을 선택하고 애플리케이션에 주입합니다.</text>
+
+  <text x="32" y="205" fill="#7DD3FC" font-family="Pretendard, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">UI</text>
+  <rect x="170" y="176" width="420" height="68" rx="16" fill="#0C4A6E" stroke="#38BDF8" stroke-width="2" filter="url(#shadow)"/>
+  <text x="380" y="205" text-anchor="middle" fill="#E0F2FE" font-family="Pretendard, Arial, sans-serif" font-size="18" font-weight="700">DeliveryAddressField</text>
+  <text x="380" y="228" text-anchor="middle" fill="#BAE6FD" font-family="Pretendard, Arial, sans-serif" font-size="13">검색 버튼 · 상세 주소 입력 · 화면 상태</text>
+
+  <path d="M380 244 L380 277" stroke="#38BDF8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="391" y="266" fill="#7DD3FC" font-family="Pretendard, Arial, sans-serif" font-size="11">호출</text>
+
+  <text x="32" y="319" fill="#7DD3FC" font-family="Pretendard, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">APPLICATION</text>
+  <rect x="130" y="280" width="500" height="82" rx="16" fill="#172554" stroke="#60A5FA" stroke-width="2" filter="url(#shadow)"/>
+  <text x="380" y="313" text-anchor="middle" fill="#DBEAFE" font-family="Pretendard, Arial, sans-serif" font-size="19" font-weight="700">createSelectDeliveryAddress</text>
+  <text x="380" y="340" text-anchor="middle" fill="#BFDBFE" font-family="Pretendard, Arial, sans-serif" font-size="13">주소 선택 → 배송 가능 지역 확인 → 결과 반환</text>
+
+  <path d="M380 362 L380 392" stroke="#38BDF8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="391" y="383" fill="#7DD3FC" font-family="Pretendard, Arial, sans-serif" font-size="11">사용</text>
+
+  <text x="32" y="429" fill="#94A3B8" font-family="Pretendard, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">DOMAIN</text>
+  <rect x="175" y="394" width="410" height="62" rx="15" fill="#1E293B" stroke="#64748B"/>
+  <text x="380" y="420" text-anchor="middle" fill="#E2E8F0" font-family="Pretendard, Arial, sans-serif" font-size="16" font-weight="700">Address · DeliverableAddress</text>
+  <text x="380" y="442" text-anchor="middle" fill="#CBD5E1" font-family="Pretendard, Arial, sans-serif" font-size="12">외부 구현과 분리된 서비스의 주소 모델</text>
+
+  <text x="32" y="520" fill="#C4B5FD" font-family="Pretendard, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">PORTS</text>
+  <rect x="60" y="486" width="300" height="72" rx="16" fill="#312E81" stroke="#A78BFA" stroke-width="2"/>
+  <text x="210" y="515" text-anchor="middle" fill="#EDE9FE" font-family="Pretendard, Arial, sans-serif" font-size="17" font-weight="700">AddressFinder</text>
+  <text x="210" y="539" text-anchor="middle" fill="#DDD6FE" font-family="Pretendard, Arial, sans-serif" font-size="12">find(): Promise&lt;Address | null&gt;</text>
+
+  <rect x="400" y="486" width="300" height="72" rx="16" fill="#312E81" stroke="#A78BFA" stroke-width="2"/>
+  <text x="550" y="515" text-anchor="middle" fill="#EDE9FE" font-family="Pretendard, Arial, sans-serif" font-size="17" font-weight="700">DeliveryAreaReader</text>
+  <text x="550" y="539" text-anchor="middle" fill="#DDD6FE" font-family="Pretendard, Arial, sans-serif" font-size="12">findByPostalCode(postalCode)</text>
+
+  <path d="M286 362 C260 410 230 438 210 486" stroke="#38BDF8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <path d="M474 362 C500 410 530 438 550 486" stroke="#38BDF8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="244" y="449" fill="#7DD3FC" font-family="Pretendard, Arial, sans-serif" font-size="11">의존</text>
+  <text x="506" y="449" fill="#7DD3FC" font-family="Pretendard, Arial, sans-serif" font-size="11">의존</text>
+
+  <text x="32" y="649" fill="#5EEAD4" font-family="Pretendard, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">ADAPTERS</text>
+  <rect x="32" y="620" width="220" height="70" rx="15" fill="#134E4A" stroke="#2DD4BF" stroke-width="2"/>
+  <text x="142" y="649" text-anchor="middle" fill="#CCFBF1" font-family="Pretendard, Arial, sans-serif" font-size="14" font-weight="700">kakaoAddressFinder</text>
+  <text x="142" y="673" text-anchor="middle" fill="#99F6E4" font-family="Pretendard, Arial, sans-serif" font-size="11">Kakao DTO → Address</text>
+
+  <rect x="270" y="620" width="220" height="70" rx="15" fill="#134E4A" stroke="#2DD4BF" stroke-width="2"/>
+  <text x="380" y="649" text-anchor="middle" fill="#CCFBF1" font-family="Pretendard, Arial, sans-serif" font-size="14" font-weight="700">partnerAddressFinder</text>
+  <text x="380" y="673" text-anchor="middle" fill="#99F6E4" font-family="Pretendard, Arial, sans-serif" font-size="11">Partner DTO → Address</text>
+
+  <rect x="508" y="620" width="220" height="70" rx="15" fill="#134E4A" stroke="#2DD4BF" stroke-width="2"/>
+  <text x="618" y="649" text-anchor="middle" fill="#CCFBF1" font-family="Pretendard, Arial, sans-serif" font-size="14" font-weight="700">deliveryAreaApi</text>
+  <text x="618" y="673" text-anchor="middle" fill="#99F6E4" font-family="Pretendard, Arial, sans-serif" font-size="11">HTTP 응답 → DeliveryArea</text>
+
+  <path d="M142 620 C148 590 170 575 195 558" stroke="#C4B5FD" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#arrow-violet)"/>
+  <path d="M380 620 C330 585 290 574 245 558" stroke="#C4B5FD" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#arrow-violet)"/>
+  <path d="M618 620 C602 588 580 574 560 558" stroke="#C4B5FD" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#arrow-violet)"/>
+  <text x="151" y="592" fill="#DDD6FE" font-family="Pretendard, Arial, sans-serif" font-size="11">구현</text>
+  <text x="322" y="593" fill="#DDD6FE" font-family="Pretendard, Arial, sans-serif" font-size="11">구현</text>
+  <text x="588" y="592" fill="#DDD6FE" font-family="Pretendard, Arial, sans-serif" font-size="11">구현</text>
+
+  <text x="32" y="790" fill="#94A3B8" font-family="Pretendard, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="1.4">EXTERNAL</text>
+  <rect x="32" y="758" width="220" height="58" rx="13" fill="#1E293B" stroke="#475569"/>
+  <text x="142" y="793" text-anchor="middle" fill="#E2E8F0" font-family="Pretendard, Arial, sans-serif" font-size="13" font-weight="600">Kakao Postcode SDK</text>
+  <rect x="270" y="758" width="220" height="58" rx="13" fill="#1E293B" stroke="#475569"/>
+  <text x="380" y="793" text-anchor="middle" fill="#E2E8F0" font-family="Pretendard, Arial, sans-serif" font-size="13" font-weight="600">Partner Address SDK</text>
+  <rect x="508" y="758" width="220" height="58" rx="13" fill="#1E293B" stroke="#475569"/>
+  <text x="618" y="793" text-anchor="middle" fill="#E2E8F0" font-family="Pretendard, Arial, sans-serif" font-size="13" font-weight="600">Delivery Area API</text>
+
+  <path d="M142 690 L142 750" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <path d="M380 690 L380 750" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <path d="M618 690 L618 750" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+
+  <rect x="32" y="858" width="696" height="66" rx="15" fill="#111C30" stroke="#334155"/>
+  <line x1="55" y1="882" x2="92" y2="882" stroke="#38BDF8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="104" y="887" fill="#CBD5E1" font-family="Pretendard, Arial, sans-serif" font-size="12">사용·호출</text>
+  <line x1="242" y1="882" x2="279" y2="882" stroke="#C4B5FD" stroke-width="3" stroke-dasharray="7 7" marker-end="url(#arrow-violet)"/>
+  <text x="291" y="887" fill="#CBD5E1" font-family="Pretendard, Arial, sans-serif" font-size="12">포트 구현</text>
+  <line x1="432" y1="882" x2="469" y2="882" stroke="#94A3B8" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <text x="481" y="887" fill="#CBD5E1" font-family="Pretendard, Arial, sans-serif" font-size="12">외부 시스템 호출</text>
+  <text x="55" y="911" fill="#94A3B8" font-family="Pretendard, Arial, sans-serif" font-size="11">점선 화살표가 바깥 구현에서 안쪽 포트를 향하는 방향이 의존성 역전의 핵심입니다.</text>
+</svg>
