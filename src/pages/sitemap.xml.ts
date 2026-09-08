@@ -1,39 +1,116 @@
 import type { APIContext } from 'astro';
 import { getPublishedPosts } from '../utils/posts';
 
-// 단일 평면(sitemap.xml) 사이트맵을 직접 생성한다.
-// @astrojs/sitemap이 만드는 index(sitemap-index.xml) + child(sitemap-0.xml) 2단 구조 대신,
-// 모든 URL을 한 파일에 담아 크롤러가 관례 경로(/sitemap.xml)에서 바로 읽게 한다.
-// 노출 기준(draft 제외)은 RSS·목록과 동일한 getPublishedPosts()로 통일한다.
+type ChangeFrequency = 'daily' | 'weekly' | 'monthly' | 'yearly';
 
-// 글이 아닌 정적 페이지. trailingSlash: 'always' 설정에 맞춰 끝 슬래시를 붙인다.
-const STATIC_PATHS = ['/', '/contact/'];
+interface SitemapEntry {
+  loc: string;
+  lastmod?: string;
+  changefreq?: ChangeFrequency;
+  priority?: number;
+  image?: string;
+}
+
+// 정적 페이지는 실제로 색인할 공개 경로만 명시한다.
+// trailingSlash: 'always' 설정에 맞춰 모든 경로 끝에 슬래시를 붙인다.
+const STATIC_PAGES = [
+  { path: '/', changefreq: 'weekly', priority: 1 },
+  { path: '/about/', changefreq: 'monthly', priority: 0.8 },
+  { path: '/about/toss/', changefreq: 'monthly', priority: 0.7 },
+  { path: '/contact/', changefreq: 'yearly', priority: 0.5 },
+] satisfies Array<{
+  path: string;
+  changefreq: ChangeFrequency;
+  priority: number;
+}>;
+
+const escapeXml = (value: string) =>
+  value.replace(
+    /[<>&'\"]/g,
+    (character) =>
+      ({
+        '<': '&lt;',
+        '>': '&gt;',
+        '&': '&amp;',
+        "'": '&apos;',
+        '"': '&quot;',
+      })[character]!,
+  );
+
+const renderEntry = ({
+  loc,
+  lastmod,
+  changefreq,
+  priority,
+  image,
+}: SitemapEntry) => `  <url>
+    <loc>${escapeXml(loc)}</loc>${
+      lastmod
+        ? `
+    <lastmod>${lastmod}</lastmod>`
+        : ''
+    }${
+      changefreq
+        ? `
+    <changefreq>${changefreq}</changefreq>`
+        : ''
+    }${
+      priority !== undefined
+        ? `
+    <priority>${priority.toFixed(1)}</priority>`
+        : ''
+    }${
+      image
+        ? `
+    <image:image>
+      <image:loc>${escapeXml(image)}</image:loc>
+    </image:image>`
+        : ''
+    }
+  </url>`;
 
 export async function GET(context: APIContext) {
   const site = context.site!; // astro.config.mjs의 site로 항상 존재한다.
-  const posts = await getPublishedPosts();
+  const posts = (await getPublishedPosts()).sort(
+    (a, b) =>
+      (b.data.updatedDate ?? b.data.pubDate).valueOf() -
+      (a.data.updatedDate ?? a.data.pubDate).valueOf(),
+  );
+  const latestPostDate = posts[0]?.data.updatedDate ?? posts[0]?.data.pubDate;
 
-  const entries = [
-    ...STATIC_PATHS.map((path) => ({ loc: new URL(path, site).href })),
-    ...posts.map((post) => ({
-      loc: new URL(`/post/${post.id}/`, site).href,
-      // 수정일이 없으면 발행일을 lastmod로 쓴다. 크롤러가 변경 글을 우선 재수집하게 한다.
-      lastmod: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
-    })),
-  ];
+  const staticEntries: SitemapEntry[] = STATIC_PAGES.map(
+    ({ path, ...metadata }) => ({
+      loc: new URL(path, site).href,
+      ...metadata,
+      // 홈은 글 목록이므로 가장 최근 글의 변경 시점을 페이지 변경 시점으로 사용한다.
+      ...(path === '/' && latestPostDate
+        ? { lastmod: latestPostDate.toISOString() }
+        : {}),
+    }),
+  );
+
+  const postEntries: SitemapEntry[] = posts.map((post) => ({
+    loc: new URL(`/post/${post.id}/`, site).href,
+    lastmod: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+    changefreq: 'monthly',
+    priority: 0.8,
+    // 대표 이미지가 있는 글은 이미지 검색에서도 발견할 수 있도록 함께 제공한다.
+    ...(post.data.heroImage
+      ? { image: new URL(post.data.heroImage.src, site).href }
+      : {}),
+  }));
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries
-  .map(
-    (e) =>
-      `  <url><loc>${e.loc}</loc>${'lastmod' in e ? `<lastmod>${e.lastmod}</lastmod>` : ''}</url>`,
-  )
-  .join('\n')}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+${[...staticEntries, ...postEntries].map(renderEntry).join('\n')}
 </urlset>
 `;
 
   return new Response(body, {
-    headers: { 'Content-Type': 'application/xml' },
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600',
+    },
   });
 }
